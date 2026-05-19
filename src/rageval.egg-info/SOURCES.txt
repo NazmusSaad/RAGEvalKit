@@ -18,7 +18,14 @@ src/rageval/cli/main.py
 src/rageval/cli/report.py
 src/rageval/cli/run_cmd.py
 src/rageval/core/__init__.py
+src/rageval/core/chunker.py
 src/rageval/core/config.py
+src/rageval/core/embedder.py
+src/rageval/core/ids.py
+src/rageval/core/ingestion.py
+src/rageval/core/loader.py
+src/rageval/core/retrieval.py
 src/rageval/storage/__init__.py
+src/rageval/storage/chroma_dao.py
 src/rageval/storage/duckdb_dao.py
 src/rageval/storage/schema.sql

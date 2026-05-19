@@ -8,5 +8,7 @@ Requires-Dist: rich>=13
 Requires-Dist: pydantic>=2.0
 Requires-Dist: duckdb>=0.10
 Requires-Dist: pyyaml>=6.0
+Requires-Dist: chromadb>=0.4
+Requires-Dist: sentence-transformers>=2.2
 Provides-Extra: test
 Requires-Dist: pytest>=8; extra == "test"

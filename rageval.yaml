@@ -1,0 +1,18 @@
+version: 1
+
+absolute:
+  faithfulness_min: 0.80
+  retrieval_relevance_min: 0.70
+
+relative:
+  faithfulness_drop_max: 0.05
+  retrieval_relevance_drop_max: 0.05
+  recall_at_k_drop_max: 0.05
+  answer_relevance_drop_max: 0.05
+  p50_latency_increase_max: 0.30
+  cost_per_query_increase_max: 0.30
+
+policy:
+  require_all_absolute: true
+  require_all_relative: true
+  allow_unknown_as_pass: false

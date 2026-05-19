@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rageval"
+version = "0.1.0"
+description = "CLI-first RAG evaluation and regression-testing framework"
+requires-python = ">=3.11"
+dependencies = [
+    "typer>=0.12",
+    "rich>=13",
+    "pydantic>=2.0",
+    "duckdb>=0.10",
+    "pyyaml>=6.0",
+]
+
+[project.scripts]
+rageval = "rageval.cli.main:app"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"rageval" = ["storage/schema.sql"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"

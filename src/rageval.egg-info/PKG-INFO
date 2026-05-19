@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: rageval
+Version: 0.1.0
+Summary: CLI-first RAG evaluation and regression-testing framework
+Requires-Python: >=3.11
+Requires-Dist: typer>=0.12
+Requires-Dist: rich>=13
+Requires-Dist: pydantic>=2.0
+Requires-Dist: duckdb>=0.10
+Requires-Dist: pyyaml>=6.0
+Provides-Extra: test
+Requires-Dist: pytest>=8; extra == "test"

@@ -6,7 +6,8 @@
       "Bash(rageval init *)",
       "Bash(python -m pytest tests/unit/ -v)",
       "Bash(findstr /v \".git\")",
-      "PowerShell($smokeDir = \"$env:TEMP\\\\rageval_smoke_test\"; Remove-Item -Recurse -Force $smokeDir -ErrorAction SilentlyContinue; New-Item -ItemType Directory $smokeDir | Out-Null; Set-Location $smokeDir; rageval init; Write-Host \"--- files created ---\"; Get-ChildItem -Recurse | Select-Object -ExpandProperty FullName)"
+      "PowerShell($smokeDir = \"$env:TEMP\\\\rageval_smoke_test\"; Remove-Item -Recurse -Force $smokeDir -ErrorAction SilentlyContinue; New-Item -ItemType Directory $smokeDir | Out-Null; Set-Location $smokeDir; rageval init; Write-Host \"--- files created ---\"; Get-ChildItem -Recurse | Select-Object -ExpandProperty FullName)",
+      "Bash(python -m pytest tests/ -v)"
     ]
   }
 }

@@ -34,21 +34,31 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 6. Static HTML report
 7. README, Docker, GitHub Action, demo
 
-## Milestone 1 Scope
-Implement only:
-- installable Python package
-- CLI stubs for all commands
-- working rageval init
-- DuckDB schema
-- Pydantic config models
-- starter configs/prompts
-- tests for CLI help, init files, DB tables, config validation
+## Progress
 
-Do not implement:
-- Chroma
-- embeddings
-- LLM calls
-- document ingestion
-- eval generation
-- reports
-- GitHub Action
+### Completed: Milestone 1
+- Installable Python package
+- Typer CLI with 8 commands
+- Working `rageval init`
+- DuckDB schema initialized
+- Pydantic config validation
+- Unit tests for help/init/schema/config
+
+### Current: Milestone 2
+Goal: implement ingest/chunk/embed/retrieve.
+
+Scope:
+- Load `.md`, `.txt`, and optionally `.pdf` files
+- Chunk documents
+- Embed chunks
+- Store vectors in Chroma
+- Store document/chunk metadata in DuckDB
+- Implement `rageval ingest`
+- Add a simple retrieval smoke test
+
+Do not implement yet:
+- LLM answer generation
+- evalset generation
+- judge/evaluator prompts
+- report generation
+- CI threshold logic

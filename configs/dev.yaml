@@ -28,8 +28,8 @@ retrieval:
   filter: null
 
 generation:
-  provider: openai
-  model: gpt-4o-mini
+  provider: mock
+  model: mock
   temperature: 0.0
   max_tokens: 512
   system_prompt_path: prompts/system.txt

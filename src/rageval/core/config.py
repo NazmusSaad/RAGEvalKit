@@ -50,7 +50,7 @@ class RetrievalConfig(BaseModel):
 class GenerationConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    provider: Literal["openai", "anthropic"] = "openai"
+    provider: Literal["openai", "anthropic", "mock"] = "openai"
     model: str = "gpt-4o-mini"
     temperature: float = 0.0
     max_tokens: int = 512

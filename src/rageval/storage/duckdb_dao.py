@@ -193,3 +193,106 @@ def get_eval_question_count(
             [evalset_id],
         ).fetchone()[0]
     return con.execute("SELECT COUNT(*) FROM eval_questions").fetchone()[0]
+
+
+# ---------------------------------------------------------------------------
+# Run DAO
+# ---------------------------------------------------------------------------
+
+def create_run(
+    con: duckdb.DuckDBPyConnection,
+    run_id: str,
+    name: str | None,
+    tag: str,
+    config_hash: str,
+    config_json: str,
+    evalset_id: str | None = None,
+) -> None:
+    """Insert a new run row with status='running' and started_at=now()."""
+    con.execute(
+        "INSERT INTO runs (run_id, name, tag, config_hash, config_json, evalset_id, started_at, status)"
+        " VALUES (?, ?, ?, ?, ?, ?, now(), ?)",
+        [run_id, name, tag, config_hash, config_json, evalset_id, "running"],
+    )
+
+
+def finish_run(
+    con: duckdb.DuckDBPyConnection,
+    run_id: str,
+    status: str = "completed",
+) -> None:
+    """Set finished_at and status on an existing run row."""
+    con.execute(
+        "UPDATE runs SET finished_at = now(), status = ? WHERE run_id = ?",
+        [status, run_id],
+    )
+
+
+def insert_run_item(
+    con: duckdb.DuckDBPyConnection,
+    item_id: str,
+    run_id: str,
+    question_id: str,
+    generated_answer: str,
+    prompt_tokens: int,
+    completion_tokens: int,
+    total_cost_usd: float | None,
+    latency_ms: int,
+    model: str,
+    error: str | None,
+) -> None:
+    """Insert one run_item row."""
+    con.execute(
+        "INSERT INTO run_items"
+        " (item_id, run_id, question_id, generated_answer,"
+        "  prompt_tokens, completion_tokens, total_cost_usd, latency_ms, model, error)"
+        " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        [item_id, run_id, question_id, generated_answer,
+         prompt_tokens, completion_tokens, total_cost_usd, latency_ms, model, error],
+    )
+
+
+def insert_retrieved_contexts(
+    con: duckdb.DuckDBPyConnection,
+    item_id: str,
+    contexts: list,  # list[RetrievedChunk] — duck-typed to avoid cross-module import
+) -> None:
+    """Insert one retrieved_contexts row per context (snapshot of chunk text + score)."""
+    for ctx in contexts:
+        con.execute(
+            "INSERT INTO retrieved_contexts (item_id, rank, chunk_id, chunk_text, score)"
+            " VALUES (?, ?, ?, ?, ?)",
+            [item_id, ctx.rank, ctx.chunk_id, ctx.text, ctx.score],
+        )
+
+
+def get_run_by_id(con: duckdb.DuckDBPyConnection, run_id: str) -> dict | None:
+    """Fetch one run row as a dict, or None if not found."""
+    row = con.execute(
+        "SELECT run_id, name, tag, config_hash, config_json, evalset_id,"
+        "       git_sha, started_at, finished_at, status"
+        " FROM runs WHERE run_id = ?",
+        [run_id],
+    ).fetchone()
+    if row is None:
+        return None
+    keys = ["run_id", "name", "tag", "config_hash", "config_json", "evalset_id",
+            "git_sha", "started_at", "finished_at", "status"]
+    return dict(zip(keys, row))
+
+
+def get_run_item_count(con: duckdb.DuckDBPyConnection, run_id: str) -> int:
+    """Count run_items belonging to *run_id*."""
+    return con.execute(
+        "SELECT COUNT(*) FROM run_items WHERE run_id = ?", [run_id]
+    ).fetchone()[0]
+
+
+def get_retrieved_context_count(con: duckdb.DuckDBPyConnection, run_id: str) -> int:
+    """Count retrieved_contexts rows for all items in *run_id*."""
+    return con.execute(
+        "SELECT COUNT(*) FROM retrieved_contexts rc"
+        " JOIN run_items ri ON rc.item_id = ri.item_id"
+        " WHERE ri.run_id = ?",
+        [run_id],
+    ).fetchone()[0]

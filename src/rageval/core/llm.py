@@ -2,10 +2,7 @@ from __future__ import annotations
 
 import json as _json
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Protocol, runtime_checkable
-
-if TYPE_CHECKING:
-    from rageval.core.config import JudgeConfig
+from typing import Any, Protocol, runtime_checkable
 
 
 @dataclass
@@ -124,8 +121,12 @@ class OpenAIClient:
         )
 
 
-def create_llm_client(config: JudgeConfig) -> LLMClient:
-    """Build an :class:`LLMClient` from a :class:`JudgeConfig`."""
+def create_llm_client(config: Any) -> LLMClient:
+    """Build an :class:`LLMClient` from any config with ``.provider`` and ``.model`` fields.
+
+    Accepts :class:`~rageval.core.config.JudgeConfig` and
+    :class:`~rageval.core.config.GenerationConfig` (both share the same fields).
+    """
     if config.provider == "openai":
         return OpenAIClient(model=config.model)
     if config.provider == "mock":

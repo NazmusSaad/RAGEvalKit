@@ -70,27 +70,38 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 - Unit tests for embeddings, Chroma upsert/query, and retrieval
 - Tests use `DummyEmbedder` and `tmp_path`; no model downloads
 
-### Current: Milestone 2D
-Goal: wire ingestion and retrieval into real CLI commands.
+### Completed: Milestone 2D
+- Implemented `rageval ingest`
+- Implemented `rageval retrieve`
+- Added full ingestion pipeline: load → chunk → embed → DuckDB → Chroma
+- Added `dummy` embedding provider for tests/dev
+- Added CLI integration tests for ingest/retrieve
+- Verified idempotent ingestion and retrieval from Chroma
+
+### Completed: Cleanup after Milestone 2
+- Moved Chroma import to lazy import path
+- Kept `rageval init` and `rageval --help` lightweight
+- Updated SentenceTransformer embedding dimension lookup to avoid deprecated API warning
+
+### Current: Milestone 3A
+Goal: add LLM client abstraction and synthetic evalset generation.
 
 Scope:
-- Implement `rageval ingest <path> --config configs/baseline.yaml`
-- Load documents with existing loader
-- Chunk with `SimpleChunker`
-- Store documents/chunks in DuckDB
-- Embed chunks with configured embedder
-- Store vectors in Chroma
-- Implement `rageval retrieve "<query>" --top-k 3 --config configs/baseline.yaml`
-- Print ranked retrieved chunks with scores and text previews
-- Add CLI integration tests using `DummyEmbedder`
-- Ensure tests use `tmp_path` and do not write to the real `.rageval/`
+- Add OpenAI-compatible LLM client abstraction
+- Add `MockLLMClient` for tests
+- Add prompt template for synthetic eval question generation
+- Implement `rageval generate-evalset`
+- Generate JSONL eval sets from already-ingested chunks
+- Store eval sets/questions in DuckDB
+- Add tests using mocked LLM responses only
 
 Do not implement yet:
-- LLM answer generation
-- evalset generation
-- judge/evaluator prompts
+- RAG answer generation
 - `rageval run`
-- report generation
-- CI threshold logic
+- retrieval/generation evaluators
+- claim extraction
+- groundedness judging
+- reports
+- compare/ci-check logic
 - GitHub Actions
 - Docker

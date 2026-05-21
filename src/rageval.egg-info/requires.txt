@@ -5,6 +5,8 @@ duckdb>=0.10
 pyyaml>=6.0
 chromadb>=0.4
 sentence-transformers>=2.2
+openai>=1.0
+jinja2>=3.0
 
 [test]
 pytest>=8

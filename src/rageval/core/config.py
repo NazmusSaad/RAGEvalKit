@@ -61,7 +61,7 @@ class GenerationConfig(BaseModel):
 class JudgeConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    provider: Literal["openai", "anthropic"] = "openai"
+    provider: Literal["openai", "anthropic", "mock"] = "openai"
     model: str = "gpt-4o-mini"
     temperature: float = 0.0
     max_concurrent: int = 4

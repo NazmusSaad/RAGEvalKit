@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -120,3 +121,75 @@ def get_chunk_by_id(con: duckdb.DuckDBPyConnection, chunk_id: str) -> dict | Non
         return None
     keys = ["chunk_id", "doc_id", "ordinal", "text", "num_tokens", "chunking_config_hash"]
     return dict(zip(keys, row))
+
+
+def get_sample_chunks(con: duckdb.DuckDBPyConnection, n: int = 100) -> list[dict]:
+    """Return up to *n* chunks ordered by doc_id and ordinal."""
+    rows = con.execute(
+        "SELECT chunk_id, doc_id, ordinal, text FROM chunks ORDER BY doc_id, ordinal LIMIT ?",
+        [n],
+    ).fetchall()
+    keys = ["chunk_id", "doc_id", "ordinal", "text"]
+    return [dict(zip(keys, row)) for row in rows]
+
+
+# ---------------------------------------------------------------------------
+# EvalSet DAO
+# ---------------------------------------------------------------------------
+
+from rageval.evalset.synthesize import EvalQuestion  # noqa: E402
+
+
+def create_eval_set(
+    con: duckdb.DuckDBPyConnection,
+    evalset_id: str,
+    name: str,
+    generated_by: str,
+    config_json: str,
+) -> None:
+    """Insert a new eval set row."""
+    con.execute(
+        "INSERT INTO eval_sets (evalset_id, name, generated_by, config_json)"
+        " VALUES (?, ?, ?, ?)",
+        [evalset_id, name, generated_by, config_json],
+    )
+
+
+def insert_eval_question(con: duckdb.DuckDBPyConnection, question: EvalQuestion) -> None:
+    """Insert a single eval question row."""
+    con.execute(
+        "INSERT INTO eval_questions"
+        " (question_id, evalset_id, question, reference_answer, source_chunk_ids, difficulty, qtype)"
+        " VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [
+            question.question_id,
+            question.evalset_id,
+            question.question,
+            question.reference_answer,
+            json.dumps(question.source_chunk_ids),
+            question.difficulty,
+            question.qtype,
+        ],
+    )
+
+
+def insert_eval_questions(
+    con: duckdb.DuckDBPyConnection, questions: list[EvalQuestion]
+) -> int:
+    """Insert multiple eval questions. Returns count inserted."""
+    for q in questions:
+        insert_eval_question(con, q)
+    return len(questions)
+
+
+def get_eval_question_count(
+    con: duckdb.DuckDBPyConnection,
+    evalset_id: str | None = None,
+) -> int:
+    """Count eval questions, optionally filtered by *evalset_id*."""
+    if evalset_id is not None:
+        return con.execute(
+            "SELECT COUNT(*) FROM eval_questions WHERE evalset_id = ?",
+            [evalset_id],
+        ).fetchone()[0]
+    return con.execute("SELECT COUNT(*) FROM eval_questions").fetchone()[0]

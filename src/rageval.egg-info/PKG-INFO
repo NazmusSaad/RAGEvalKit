@@ -10,5 +10,7 @@ Requires-Dist: duckdb>=0.10
 Requires-Dist: pyyaml>=6.0
 Requires-Dist: chromadb>=0.4
 Requires-Dist: sentence-transformers>=2.2
+Requires-Dist: openai>=1.0
+Requires-Dist: jinja2>=3.0
 Provides-Extra: test
 Requires-Dist: pytest>=8; extra == "test"

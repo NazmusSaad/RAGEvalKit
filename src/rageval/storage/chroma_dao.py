@@ -4,8 +4,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-import chromadb
-
 from rageval.core.chunker import Chunk
 
 
@@ -25,6 +23,8 @@ def get_or_create_collection(
     distance: str = "cosine",
 ) -> Any:
     """Open (or create) a persistent Chroma collection at *path*."""
+    import chromadb  # lazy — only needed when actually opening a collection
+
     client = chromadb.PersistentClient(path=str(path))
     return client.get_or_create_collection(
         name=collection_name,

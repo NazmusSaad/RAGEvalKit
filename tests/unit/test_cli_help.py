@@ -1,3 +1,6 @@
+import subprocess
+import sys
+
 from typer.testing import CliRunner
 
 from rageval.cli.main import app
@@ -13,6 +16,7 @@ EXPECTED_COMMANDS = [
     "report",
     "ci-check",
     "inspect",
+    "retrieve",
 ]
 
 
@@ -31,3 +35,23 @@ def test_each_command_has_help():
     for cmd in EXPECTED_COMMANDS:
         result = runner.invoke(app, [cmd, "--help"])
         assert result.exit_code == 0, f"'{cmd} --help' failed with exit code {result.exit_code}"
+
+
+def test_importing_cli_main_does_not_load_chromadb():
+    """chromadb must not be imported at module load time.
+
+    Spawns a fresh interpreter so no prior test has already loaded chromadb,
+    then verifies it is absent from sys.modules after importing the CLI app.
+    """
+    code = (
+        "import sys; "
+        "from rageval.cli.main import app; "
+        "assert 'chromadb' not in sys.modules, "
+        "'chromadb was imported eagerly: ' + str(sys.modules.get('chromadb'))"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, f"chromadb was loaded eagerly:\n{result.stderr}"

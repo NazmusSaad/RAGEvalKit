@@ -16,6 +16,7 @@ src/rageval/cli/init_cmd.py
 src/rageval/cli/inspect_cmd.py
 src/rageval/cli/main.py
 src/rageval/cli/report.py
+src/rageval/cli/retrieve.py
 src/rageval/cli/run_cmd.py
 src/rageval/core/__init__.py
 src/rageval/core/chunker.py

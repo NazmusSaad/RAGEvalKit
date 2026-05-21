@@ -7,6 +7,7 @@ from rageval.cli import (
     ingest,
     inspect_cmd,
     report,
+    retrieve,
     run_cmd,
 )
 from rageval.cli import init_cmd
@@ -26,3 +27,4 @@ app.command("compare")(compare.compare)
 app.command("report")(report.report)
 app.command("ci-check")(ci_check.ci_check)
 app.command("inspect")(inspect_cmd.inspect_run)
+app.command("retrieve")(retrieve.retrieve)

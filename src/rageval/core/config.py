@@ -25,7 +25,7 @@ class ChunkingConfig(BaseModel):
 class EmbeddingConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    provider: Literal["sentence_transformers", "openai"] = "sentence_transformers"
+    provider: Literal["sentence_transformers", "openai", "dummy"] = "sentence_transformers"
     model: str = "BAAI/bge-small-en-v1.5"
     batch_size: int = 64
 

@@ -52,7 +52,12 @@ class SentenceTransformerEmbedder:
         from sentence_transformers import SentenceTransformer  # lazy import
 
         self._model = SentenceTransformer(model_name)
-        self._dim: int = self._model.get_sentence_embedding_dimension()
+        # sentence-transformers ≥3.x renamed the method; fall back for older versions
+        _get_dim = getattr(
+            self._model, "get_embedding_dimension",
+            self._model.get_sentence_embedding_dimension,
+        )
+        self._dim: int = _get_dim()
 
     @property
     def dim(self) -> int:
@@ -72,4 +77,6 @@ def create_embedder(config: EmbeddingConfig) -> Embedder:
     """Build the appropriate :class:`Embedder` from an ``EmbeddingConfig``."""
     if config.provider == "sentence_transformers":
         return SentenceTransformerEmbedder(model_name=config.model)
+    if config.provider == "dummy":
+        return DummyEmbedder(dim=16)
     raise ValueError(f"Unknown embedding provider: {config.provider!r}")

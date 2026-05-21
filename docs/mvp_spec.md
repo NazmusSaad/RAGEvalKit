@@ -11,13 +11,14 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 - Pydantic v2 config validation
 - DuckDB for run/eval storage
 - ChromaDB for vectors starting Milestone 2
-- LlamaIndex or lightweight custom ingestion/retrieval later
+- Lightweight custom ingestion/retrieval for MVP; avoid LlamaIndex unless needed later
 - Static HTML report later
 - No Streamlit/FastAPI/Postgres/auth/model training in MVP
 
 ## MVP Commands
 - rageval init
 - rageval ingest
+- rageval retrieve
 - rageval generate-evalset
 - rageval run
 - rageval compare
@@ -38,27 +39,58 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 
 ### Completed: Milestone 1
 - Installable Python package
-- Typer CLI with 8 commands
+- Typer CLI with command stubs
 - Working `rageval init`
 - DuckDB schema initialized
 - Pydantic config validation
 - Unit tests for help/init/schema/config
 
-### Current: Milestone 2
-Goal: implement ingest/chunk/embed/retrieve.
+### Completed: Milestone 2A
+- Stable document/chunk ID helpers
+- `.md` / `.txt` document loader
+- Recursive directory loading
+- Deterministic `SimpleChunker`
+- Tiny example corpus
+- Unit tests for IDs, loading, and chunking
+
+### Completed: Milestone 2B
+- DuckDB DAO methods for documents and chunks
+- Idempotent document/chunk upserts
+- `ingest_documents_to_duckdb()` service
+- Integration tests for tiny-corpus ingestion
+- No Chroma or embeddings in this step
+
+### Completed: Milestone 2C
+- `Embedder` protocol
+- `DummyEmbedder` for tests/dev
+- `SentenceTransformerEmbedder` for real local embeddings
+- `create_embedder(config)` factory
+- Chroma vector storage DAO
+- `retrieve_top_k()` retrieval primitive
+- Unit tests for embeddings, Chroma upsert/query, and retrieval
+- Tests use `DummyEmbedder` and `tmp_path`; no model downloads
+
+### Current: Milestone 2D
+Goal: wire ingestion and retrieval into real CLI commands.
 
 Scope:
-- Load `.md`, `.txt`, and optionally `.pdf` files
-- Chunk documents
-- Embed chunks
+- Implement `rageval ingest <path> --config configs/baseline.yaml`
+- Load documents with existing loader
+- Chunk with `SimpleChunker`
+- Store documents/chunks in DuckDB
+- Embed chunks with configured embedder
 - Store vectors in Chroma
-- Store document/chunk metadata in DuckDB
-- Implement `rageval ingest`
-- Add a simple retrieval smoke test
+- Implement `rageval retrieve "<query>" --top-k 3 --config configs/baseline.yaml`
+- Print ranked retrieved chunks with scores and text previews
+- Add CLI integration tests using `DummyEmbedder`
+- Ensure tests use `tmp_path` and do not write to the real `.rageval/`
 
 Do not implement yet:
 - LLM answer generation
 - evalset generation
 - judge/evaluator prompts
+- `rageval run`
 - report generation
 - CI threshold logic
+- GitHub Actions
+- Docker

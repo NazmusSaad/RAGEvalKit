@@ -1,0 +1,54 @@
+version: 1
+name: baseline
+seed: 42
+
+corpus:
+  path: ./docs
+  glob: "**/*.{md,pdf,txt}"
+
+chunking:
+  strategy: recursive
+  chunk_size: 512
+  chunk_overlap: 64
+
+embedding:
+  provider: dummy
+  model: dummy
+  batch_size: 64
+
+vector_store:
+  type: chroma
+  path: .rageval/chroma
+  collection: docs_dev
+  distance: cosine
+
+retrieval:
+  top_k: 5
+  rerank: null
+  filter: null
+
+generation:
+  provider: openai
+  model: gpt-4o-mini
+  temperature: 0.0
+  max_tokens: 512
+  system_prompt_path: prompts/system.txt
+  prompt_template_path: prompts/rag.j2
+
+judge:
+  provider: mock
+  model: mock
+  temperature: 0.0
+  max_concurrent: 4
+
+evaluators:
+  - retrieval_relevance
+  - groundedness
+  - answer_relevance
+
+evalset:
+  path: evalsets/v1.jsonl
+
+cost:
+  input_per_1k: 0.015
+  output_per_1k: 0.060

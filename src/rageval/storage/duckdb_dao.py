@@ -296,3 +296,80 @@ def get_retrieved_context_count(con: duckdb.DuckDBPyConnection, run_id: str) -> 
         " WHERE ri.run_id = ?",
         [run_id],
     ).fetchone()[0]
+
+
+# ---------------------------------------------------------------------------
+# Metric score DAO
+# ---------------------------------------------------------------------------
+
+def get_run_items_with_questions(
+    con: duckdb.DuckDBPyConnection,
+    run_id: str,
+) -> list[dict]:
+    """Return run items joined with eval_questions, including source_chunk_ids."""
+    rows = con.execute(
+        "SELECT ri.item_id, ri.question_id, eq.source_chunk_ids"
+        " FROM run_items ri"
+        " LEFT JOIN eval_questions eq ON ri.question_id = eq.question_id"
+        " WHERE ri.run_id = ?",
+        [run_id],
+    ).fetchall()
+    result = []
+    for item_id, question_id, source_ids_json in rows:
+        source_ids: list[str] = json.loads(source_ids_json) if source_ids_json else []
+        result.append({
+            "item_id": item_id,
+            "question_id": question_id,
+            "source_chunk_ids": source_ids,
+        })
+    return result
+
+
+def get_retrieved_chunk_ids_for_item(
+    con: duckdb.DuckDBPyConnection,
+    item_id: str,
+) -> list[str]:
+    """Return chunk_ids from retrieved_contexts for *item_id*, ordered by rank."""
+    rows = con.execute(
+        "SELECT chunk_id FROM retrieved_contexts WHERE item_id = ? ORDER BY rank",
+        [item_id],
+    ).fetchall()
+    return [row[0] for row in rows]
+
+
+def insert_metric_score(
+    con: duckdb.DuckDBPyConnection,
+    item_id: str,
+    metric: str,
+    score: float,
+    label: str,
+    reason: str,
+    judge_model: str | None = None,
+    raw_json: str | None = None,
+) -> None:
+    """Upsert a metric score row (delete-then-insert for idempotency)."""
+    con.execute(
+        "DELETE FROM metric_scores WHERE item_id = ? AND metric = ?",
+        [item_id, metric],
+    )
+    con.execute(
+        "INSERT INTO metric_scores (item_id, metric, score, label, reason, judge_model, raw_json)"
+        " VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [item_id, metric, score, label, reason, judge_model, raw_json],
+    )
+
+
+def get_metric_scores_for_run(
+    con: duckdb.DuckDBPyConnection,
+    run_id: str,
+) -> list[dict]:
+    """Return all metric_scores rows for every item in *run_id*."""
+    rows = con.execute(
+        "SELECT ms.item_id, ms.metric, ms.score, ms.label, ms.reason"
+        " FROM metric_scores ms"
+        " JOIN run_items ri ON ms.item_id = ri.item_id"
+        " WHERE ri.run_id = ?",
+        [run_id],
+    ).fetchall()
+    keys = ["item_id", "metric", "score", "label", "reason"]
+    return [dict(zip(keys, row)) for row in rows]

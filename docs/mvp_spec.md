@@ -93,26 +93,33 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 - Stored eval_sets and eval_questions in DuckDB
 - Added tests with no real API calls
 
-### Current: Milestone 3B
-Goal: implement `rageval run` to execute a RAG pipeline over an evalset and store traces.
+### Completed: Milestone 3B
+- Implemented `rageval run`
+- Added evalset JSONL loader
+- Added `RAGPipeline` and `QueryTrace`
+- Added RAG prompt rendering with retrieved contexts
+- Stored runs, run_items, and retrieved_contexts in DuckDB
+- Added deterministic run item IDs
+- Added `--limit` for cheap local runs
+- Added per-question error capture
+- Verified manual dev flow with zero errors
+
+### Current: Milestone 4A
+Goal: implement deterministic retrieval metrics.
 
 Scope:
-- Load eval questions from JSONL or DuckDB
-- For each question, retrieve top-k chunks from Chroma
-- Generate an answer using configured generation model
-- Store a run row in DuckDB
-- Store one run_item per question
-- Store retrieved_contexts snapshots per run_item
-- Track latency, token counts, model name, and optional cost
-- Add tests using `MockLLMClient`
+- Implement `recall@k`
+- Implement `MRR`
+- Use evalset `source_chunk_ids` as ground-truth source chunks
+- Store metric scores in DuckDB
+- Add tests for retrieval metrics
 
 Do not implement yet:
-- Evaluators
-- Retrieval relevance scoring
-- Claim extraction
-- Groundedness
-- Answer relevance scoring
-- Reports
+- LLM-as-judge retrieval relevance
+- claim extraction
+- groundedness
+- answer relevance
+- reports
 - compare/ci-check
 - GitHub Actions
 - Docker

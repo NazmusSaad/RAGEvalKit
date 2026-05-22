@@ -17,6 +17,7 @@ EXPECTED_COMMANDS = [
     "ci-check",
     "inspect",
     "retrieve",
+    "evaluate-retrieval",
 ]
 
 

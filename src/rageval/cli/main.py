@@ -3,6 +3,7 @@ import typer
 from rageval.cli import (
     ci_check,
     compare,
+    evaluate_retrieval,
     generate_evalset,
     ingest,
     inspect_cmd,
@@ -28,3 +29,4 @@ app.command("report")(report.report)
 app.command("ci-check")(ci_check.ci_check)
 app.command("inspect")(inspect_cmd.inspect_run)
 app.command("retrieve")(retrieve.retrieve)
+app.command("evaluate-retrieval")(evaluate_retrieval.evaluate_retrieval)

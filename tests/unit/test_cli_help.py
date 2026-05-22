@@ -18,6 +18,7 @@ EXPECTED_COMMANDS = [
     "inspect",
     "retrieve",
     "evaluate-retrieval",
+    "evaluate-answer-relevance",
 ]
 
 

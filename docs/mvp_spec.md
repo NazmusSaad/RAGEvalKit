@@ -104,22 +104,39 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 - Added per-question error capture
 - Verified manual dev flow with zero errors
 
-### Current: Milestone 4A
-Goal: implement deterministic retrieval metrics.
+### Completed: Milestone 4A
+- Added deterministic retrieval metrics
+- Implemented recall@k
+- Implemented MRR
+- Used evalset `source_chunk_ids` as retrieval ground truth
+- Added `rageval evaluate-retrieval`
+- Stored retrieval metric scores in DuckDB
+- Added idempotent metric insertion into `metric_scores`
+- Verified manual retrieval evaluation flow
+
+### Completed: Milestone 4B
+- Added LLM-as-judge answer relevance evaluator
+- Implemented `rageval evaluate-answer-relevance`
+- Stored answer relevance scores in `metric_scores`
+- Added pass/fail/unknown label policy
+- Added mock judge path for manual dev testing
+- Verified manual answer relevance evaluation flow
+
+### Current: Milestone 4C
+Goal: implement claim extraction from generated answers.
 
 Scope:
-- Implement `recall@k`
-- Implement `MRR`
-- Use evalset `source_chunk_ids` as ground-truth source chunks
-- Store metric scores in DuckDB
-- Add tests for retrieval metrics
+- Extract atomic factual claims from each generated answer
+- Store extracted claims in DuckDB `claim_evaluations` or a dedicated claim table path
+- Use `MockLLMClient` in tests/dev
+- Add CLI command to extract claims for a run
 
 Do not implement yet:
-- LLM-as-judge retrieval relevance
-- claim extraction
-- groundedness
-- answer relevance
-- reports
+- Groundedness / faithfulness judging
+- Per-claim support classification
+- Completeness
+- Safety
+- Reports
 - compare/ci-check
 - GitHub Actions
 - Docker

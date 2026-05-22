@@ -373,3 +373,29 @@ def get_metric_scores_for_run(
     ).fetchall()
     keys = ["item_id", "metric", "score", "label", "reason"]
     return [dict(zip(keys, row)) for row in rows]
+
+
+def get_run_items_for_evaluation(
+    con: duckdb.DuckDBPyConnection,
+    run_id: str,
+) -> list[dict]:
+    """Return item_id, question text, and generated_answer for every item in *run_id*.
+
+    Used by LLM-as-judge evaluators that need the full question and answer.
+    """
+    rows = con.execute(
+        "SELECT ri.item_id, ri.question_id, eq.question, ri.generated_answer"
+        " FROM run_items ri"
+        " LEFT JOIN eval_questions eq ON ri.question_id = eq.question_id"
+        " WHERE ri.run_id = ?",
+        [run_id],
+    ).fetchall()
+    return [
+        {
+            "item_id": item_id,
+            "question_id": question_id,
+            "question": question or "",
+            "generated_answer": generated_answer or "",
+        }
+        for item_id, question_id, question, generated_answer in rows
+    ]

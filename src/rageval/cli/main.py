@@ -4,6 +4,7 @@ from rageval.cli import (
     ci_check,
     compare,
     evaluate_answer_relevance,
+    evaluate_groundedness,
     evaluate_retrieval,
     extract_claims,
     generate_evalset,
@@ -34,3 +35,4 @@ app.command("retrieve")(retrieve.retrieve)
 app.command("evaluate-retrieval")(evaluate_retrieval.evaluate_retrieval)
 app.command("evaluate-answer-relevance")(evaluate_answer_relevance.evaluate_answer_relevance)
 app.command("extract-claims")(extract_claims.extract_claims)
+app.command("evaluate-groundedness")(evaluate_groundedness.evaluate_groundedness)

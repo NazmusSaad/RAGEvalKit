@@ -444,3 +444,49 @@ def get_claim_count_for_run(con: duckdb.DuckDBPyConnection, run_id: str) -> int:
         " WHERE ri.run_id = ?",
         [run_id],
     ).fetchone()[0]
+
+
+def get_claims_for_run(con: duckdb.DuckDBPyConnection, run_id: str) -> list[dict]:
+    """Return all claim_evaluations rows for every item in *run_id*, ordered by item then claim."""
+    rows = con.execute(
+        "SELECT ce.item_id, ce.claim_idx, ce.claim_text, ce.verdict,"
+        "       ce.supporting_chunk_ids, ce.rationale"
+        " FROM claim_evaluations ce"
+        " JOIN run_items ri ON ce.item_id = ri.item_id"
+        " WHERE ri.run_id = ?"
+        " ORDER BY ce.item_id, ce.claim_idx",
+        [run_id],
+    ).fetchall()
+    keys = ["item_id", "claim_idx", "claim_text", "verdict", "supporting_chunk_ids", "rationale"]
+    return [dict(zip(keys, row)) for row in rows]
+
+
+def update_claim_evaluation(
+    con: duckdb.DuckDBPyConnection,
+    item_id: str,
+    claim_idx: int,
+    verdict: str,
+    supporting_chunk_ids: str,  # JSON string
+    rationale: str | None,
+) -> None:
+    """Update verdict, supporting_chunk_ids, and rationale for one claim row."""
+    con.execute(
+        "UPDATE claim_evaluations"
+        " SET verdict = ?, supporting_chunk_ids = ?, rationale = ?"
+        " WHERE item_id = ? AND claim_idx = ?",
+        [verdict, supporting_chunk_ids, rationale, item_id, claim_idx],
+    )
+
+
+def get_retrieved_contexts_for_item(
+    con: duckdb.DuckDBPyConnection,
+    item_id: str,
+) -> list[dict]:
+    """Return full retrieved_contexts rows for *item_id*, ordered by rank."""
+    rows = con.execute(
+        "SELECT rank, chunk_id, chunk_text, score"
+        " FROM retrieved_contexts WHERE item_id = ? ORDER BY rank",
+        [item_id],
+    ).fetchall()
+    keys = ["rank", "chunk_id", "chunk_text", "score"]
+    return [dict(zip(keys, row)) for row in rows]

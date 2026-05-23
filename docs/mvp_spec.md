@@ -122,20 +122,31 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 - Added mock judge path for manual dev testing
 - Verified manual answer relevance evaluation flow
 
-### Current: Milestone 4C
-Goal: implement claim extraction from generated answers.
+### Completed: Milestone 4C
+- Added claim extraction evaluator
+- Implemented `rageval extract-claims`
+- Extracted atomic claims from generated answers
+- Stored claims in `claim_evaluations`
+- Stored extracted claims with `verdict="unjudged"`
+- Added mock/dev path for manual claim extraction testing
+- Verified manual claim extraction flow
+
+### Current: Milestone 4D
+Goal: implement groundedness / faithfulness evaluation.
 
 Scope:
-- Extract atomic factual claims from each generated answer
-- Store extracted claims in DuckDB `claim_evaluations` or a dedicated claim table path
-- Use `MockLLMClient` in tests/dev
-- Add CLI command to extract claims for a run
+- Read extracted claims from `claim_evaluations`
+- Read retrieved contexts for each run item
+- Judge each claim as supported, contradicted, or not enough info
+- Update claim rows with verdict, supporting chunk IDs, and rationale
+- Compute item-level faithfulness score
+- Store faithfulness scores in `metric_scores`
+- Add `rageval evaluate-groundedness`
 
 Do not implement yet:
-- Groundedness / faithfulness judging
-- Per-claim support classification
 - Completeness
 - Safety
+- Overall aggregator
 - Reports
 - compare/ci-check
 - GitHub Actions

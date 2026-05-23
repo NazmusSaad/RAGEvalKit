@@ -490,3 +490,58 @@ def get_retrieved_contexts_for_item(
     ).fetchall()
     keys = ["rank", "chunk_id", "chunk_text", "score"]
     return [dict(zip(keys, row)) for row in rows]
+
+
+# ---------------------------------------------------------------------------
+# Root-cause DAO
+# ---------------------------------------------------------------------------
+
+def get_run_items_basic(
+    con: duckdb.DuckDBPyConnection,
+    run_id: str,
+) -> list[dict]:
+    """Return item_id and question_id for every run item (lightweight query)."""
+    rows = con.execute(
+        "SELECT item_id, question_id FROM run_items WHERE run_id = ?",
+        [run_id],
+    ).fetchall()
+    return [{"item_id": row[0], "question_id": row[1]} for row in rows]
+
+
+def upsert_root_cause(
+    con: duckdb.DuckDBPyConnection,
+    item_id: str,
+    primary_cause: str,
+    secondary_causes: list,
+    suggested_fix: str,
+) -> None:
+    """Upsert one root_causes row (delete-then-insert for idempotency)."""
+    con.execute("DELETE FROM root_causes WHERE item_id = ?", [item_id])
+    con.execute(
+        "INSERT INTO root_causes (item_id, primary_cause, secondary_causes, suggested_fix)"
+        " VALUES (?, ?, ?, ?)",
+        [item_id, primary_cause, json.dumps(secondary_causes), suggested_fix],
+    )
+
+
+def get_root_causes_for_run(
+    con: duckdb.DuckDBPyConnection,
+    run_id: str,
+) -> list[dict]:
+    """Return all root_causes rows for every item in *run_id*."""
+    rows = con.execute(
+        "SELECT rc.item_id, rc.primary_cause, rc.secondary_causes, rc.suggested_fix"
+        " FROM root_causes rc"
+        " JOIN run_items ri ON rc.item_id = ri.item_id"
+        " WHERE ri.run_id = ?",
+        [run_id],
+    ).fetchall()
+    return [
+        {
+            "item_id": row[0],
+            "primary_cause": row[1],
+            "secondary_causes": json.loads(row[2]) if row[2] else [],
+            "suggested_fix": row[3],
+        }
+        for row in rows
+    ]

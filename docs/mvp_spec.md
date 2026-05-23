@@ -131,23 +131,31 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 - Added mock/dev path for manual claim extraction testing
 - Verified manual claim extraction flow
 
-### Current: Milestone 4D
-Goal: implement groundedness / faithfulness evaluation.
+### Completed: Milestone 4D
+- Added groundedness evaluator
+- Implemented `rageval evaluate-groundedness`
+- Classified extracted claims as supported, contradicted, or not enough info
+- Mapped judge supporting indices to retrieved chunk IDs
+- Updated `claim_evaluations` with verdicts, supporting chunk IDs, and rationales
+- Stored item-level faithfulness scores in `metric_scores`
+- Verified manual groundedness flow with mean faithfulness = 1.000
+
+### Current: Milestone 4E
+Goal: add an overall evaluation summary and root-cause classification.
 
 Scope:
-- Read extracted claims from `claim_evaluations`
-- Read retrieved contexts for each run item
-- Judge each claim as supported, contradicted, or not enough info
-- Update claim rows with verdict, supporting chunk IDs, and rationale
-- Compute item-level faithfulness score
-- Store faithfulness scores in `metric_scores`
-- Add `rageval evaluate-groundedness`
+- Aggregate existing metric scores per run
+- Produce item-level overall labels: pass / fail / unknown
+- Add simple root-cause rules:
+  - retrieval failure
+  - grounding failure
+  - answer relevance failure
+  - judge uncertainty
+- Store root causes in DuckDB
+- Add a CLI command such as `rageval summarize-run`
 
 Do not implement yet:
-- Completeness
-- Safety
-- Overall aggregator
-- Reports
+- HTML report
 - compare/ci-check
 - GitHub Actions
 - Docker

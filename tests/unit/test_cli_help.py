@@ -21,6 +21,7 @@ EXPECTED_COMMANDS = [
     "evaluate-answer-relevance",
     "extract-claims",
     "evaluate-groundedness",
+    "summarize-run",
 ]
 
 

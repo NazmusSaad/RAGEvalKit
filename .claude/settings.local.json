@@ -9,7 +9,8 @@
       "PowerShell($smokeDir = \"$env:TEMP\\\\rageval_smoke_test\"; Remove-Item -Recurse -Force $smokeDir -ErrorAction SilentlyContinue; New-Item -ItemType Directory $smokeDir | Out-Null; Set-Location $smokeDir; rageval init; Write-Host \"--- files created ---\"; Get-ChildItem -Recurse | Select-Object -ExpandProperty FullName)",
       "Bash(python -m pytest tests/ -v)",
       "Bash(python -m pytest tests/integration/test_cli_run.py -v --tb=short)",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(python -m pytest tests/ --tb=short -q)"
     ]
   }
 }

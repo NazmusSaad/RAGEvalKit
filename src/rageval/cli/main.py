@@ -13,6 +13,7 @@ from rageval.cli import (
     report,
     retrieve,
     run_cmd,
+    summarize_run,
 )
 from rageval.cli import init_cmd
 
@@ -36,3 +37,4 @@ app.command("evaluate-retrieval")(evaluate_retrieval.evaluate_retrieval)
 app.command("evaluate-answer-relevance")(evaluate_answer_relevance.evaluate_answer_relevance)
 app.command("extract-claims")(extract_claims.extract_claims)
 app.command("evaluate-groundedness")(evaluate_groundedness.evaluate_groundedness)
+app.command("summarize-run")(summarize_run.summarize_run)

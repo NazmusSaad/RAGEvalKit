@@ -399,3 +399,48 @@ def get_run_items_for_evaluation(
         }
         for item_id, question_id, question, generated_answer in rows
     ]
+
+
+# ---------------------------------------------------------------------------
+# Claim evaluations DAO
+# ---------------------------------------------------------------------------
+
+def delete_claims_for_item(con: duckdb.DuckDBPyConnection, item_id: str) -> None:
+    """Delete all claim_evaluations rows for *item_id* (used before re-extraction)."""
+    con.execute("DELETE FROM claim_evaluations WHERE item_id = ?", [item_id])
+
+
+def insert_extracted_claims(
+    con: duckdb.DuckDBPyConnection,
+    item_id: str,
+    claims: list,  # list[ExtractedClaim] — duck-typed to avoid cross-package import
+) -> None:
+    """Insert extracted claims as 'unjudged' rows; verdict/rationale filled later."""
+    for claim in claims:
+        con.execute(
+            "INSERT INTO claim_evaluations"
+            " (item_id, claim_idx, claim_text, verdict, supporting_chunk_ids, rationale)"
+            " VALUES (?, ?, ?, ?, ?, ?)",
+            [item_id, claim.claim_idx, claim.claim_text, "unjudged", "[]", None],
+        )
+
+
+def get_claims_for_item(con: duckdb.DuckDBPyConnection, item_id: str) -> list[dict]:
+    """Return claim_evaluations rows for *item_id*, ordered by claim_idx."""
+    rows = con.execute(
+        "SELECT item_id, claim_idx, claim_text, verdict, supporting_chunk_ids, rationale"
+        " FROM claim_evaluations WHERE item_id = ? ORDER BY claim_idx",
+        [item_id],
+    ).fetchall()
+    keys = ["item_id", "claim_idx", "claim_text", "verdict", "supporting_chunk_ids", "rationale"]
+    return [dict(zip(keys, row)) for row in rows]
+
+
+def get_claim_count_for_run(con: duckdb.DuckDBPyConnection, run_id: str) -> int:
+    """Count all claim_evaluations rows for every item in *run_id*."""
+    return con.execute(
+        "SELECT COUNT(*) FROM claim_evaluations ce"
+        " JOIN run_items ri ON ce.item_id = ri.item_id"
+        " WHERE ri.run_id = ?",
+        [run_id],
+    ).fetchone()[0]

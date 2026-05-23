@@ -5,6 +5,7 @@ from rageval.cli import (
     compare,
     evaluate_answer_relevance,
     evaluate_retrieval,
+    extract_claims,
     generate_evalset,
     ingest,
     inspect_cmd,
@@ -32,3 +33,4 @@ app.command("inspect")(inspect_cmd.inspect_run)
 app.command("retrieve")(retrieve.retrieve)
 app.command("evaluate-retrieval")(evaluate_retrieval.evaluate_retrieval)
 app.command("evaluate-answer-relevance")(evaluate_answer_relevance.evaluate_answer_relevance)
+app.command("extract-claims")(extract_claims.extract_claims)

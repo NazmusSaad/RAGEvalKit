@@ -19,6 +19,7 @@ EXPECTED_COMMANDS = [
     "retrieve",
     "evaluate-retrieval",
     "evaluate-answer-relevance",
+    "extract-claims",
 ]
 
 

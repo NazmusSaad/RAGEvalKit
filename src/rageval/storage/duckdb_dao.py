@@ -545,3 +545,35 @@ def get_root_causes_for_run(
         }
         for row in rows
     ]
+
+
+def get_run_metric_means(
+    con: duckdb.DuckDBPyConnection,
+    run_id: str,
+) -> dict[str, float]:
+    """Mean score per metric for *run_id*, excluding unknown-labelled rows."""
+    rows = con.execute(
+        "SELECT ms.metric, AVG(ms.score) AS mean_score"
+        " FROM metric_scores ms"
+        " JOIN run_items ri ON ms.item_id = ri.item_id"
+        " WHERE ri.run_id = ? AND ms.label != 'unknown'"
+        " GROUP BY ms.metric",
+        [run_id],
+    ).fetchall()
+    return {row[0]: row[1] for row in rows if row[1] is not None}
+
+
+def get_root_cause_distribution(
+    con: duckdb.DuckDBPyConnection,
+    run_id: str,
+) -> dict[str, int]:
+    """Count of each primary_cause across all items in *run_id*."""
+    rows = con.execute(
+        "SELECT rc.primary_cause, COUNT(*) AS cnt"
+        " FROM root_causes rc"
+        " JOIN run_items ri ON rc.item_id = ri.item_id"
+        " WHERE ri.run_id = ?"
+        " GROUP BY rc.primary_cause",
+        [run_id],
+    ).fetchall()
+    return {row[0]: row[1] for row in rows}

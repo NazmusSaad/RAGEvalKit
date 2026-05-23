@@ -140,22 +140,28 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 - Stored item-level faithfulness scores in `metric_scores`
 - Verified manual groundedness flow with mean faithfulness = 1.000
 
-### Current: Milestone 4E
-Goal: add an overall evaluation summary and root-cause classification.
+### Completed: Milestone 4E
+- Added overall run summarization
+- Implemented `rageval summarize-run`
+- Aggregated recall@k, MRR, answer relevance, and faithfulness
+- Added item-level pass/fail/unknown labels
+- Added deterministic root-cause classification
+- Stored root causes in DuckDB
+- Verified full mock/dev evaluation flow
+
+### Current: Milestone 5A
+Goal: compare two completed runs.
 
 Scope:
-- Aggregate existing metric scores per run
-- Produce item-level overall labels: pass / fail / unknown
-- Add simple root-cause rules:
-  - retrieval failure
-  - grounding failure
-  - answer relevance failure
-  - judge uncertainty
-- Store root causes in DuckDB
-- Add a CLI command such as `rageval summarize-run`
+- Implement `rageval compare --baseline <run_id> --candidate <run_id>`
+- Compare mean metrics between runs
+- Compare pass/fail/unknown counts
+- Compare root-cause distributions
+- Show metric deltas in a Rich table
+- Do not implement CI gating yet
 
 Do not implement yet:
 - HTML report
-- compare/ci-check
+- ci-check
 - GitHub Actions
 - Docker

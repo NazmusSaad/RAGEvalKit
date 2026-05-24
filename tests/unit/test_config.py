@@ -65,9 +65,14 @@ class TestPipelineConfig:
 class TestThresholdsConfig:
     def test_defaults(self):
         cfg = ThresholdsConfig()
-        assert cfg.absolute.faithfulness_min == 0.80
-        assert cfg.absolute.retrieval_relevance_min == 0.70
-        assert cfg.relative.faithfulness_drop_max == 0.05
+        # All threshold fields default to None (opt-in)
+        assert cfg.absolute.faithfulness_min is None
+        assert cfg.absolute.retrieval_relevance_min is None
+        assert cfg.absolute.recall_at_k_min is None
+        assert cfg.absolute.answer_relevance_min is None
+        assert cfg.relative.faithfulness_drop_max is None
+        assert cfg.relative.recall_at_k_drop_max is None
+        assert cfg.relative.mrr_drop_max is None
         assert cfg.policy.require_all_absolute is True
         assert cfg.policy.allow_unknown_as_pass is False
 

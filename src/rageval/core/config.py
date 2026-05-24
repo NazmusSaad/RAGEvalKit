@@ -106,19 +106,27 @@ class PipelineConfig(BaseModel):
 class AbsoluteThresholds(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    faithfulness_min: float = 0.80
-    retrieval_relevance_min: float = 0.70
+    # Primary names (preferred)
+    recall_at_k_min: float | None = None
+    answer_relevance_min: float | None = None
+    faithfulness_min: float | None = None
+    # Backward-compat alias: used for recall_at_k when recall_at_k_min is None
+    retrieval_relevance_min: float | None = None
 
 
 class RelativeThresholds(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    faithfulness_drop_max: float = 0.05
-    retrieval_relevance_drop_max: float = 0.05
-    recall_at_k_drop_max: float = 0.05
-    answer_relevance_drop_max: float = 0.05
-    p50_latency_increase_max: float = 0.30
-    cost_per_query_increase_max: float = 0.30
+    # Primary names (preferred)
+    recall_at_k_drop_max: float | None = None
+    answer_relevance_drop_max: float | None = None
+    faithfulness_drop_max: float | None = None
+    mrr_drop_max: float | None = None
+    # Backward-compat alias: used for recall_at_k when recall_at_k_drop_max is None
+    retrieval_relevance_drop_max: float | None = None
+    # Out-of-scope for 5B but preserved for YAML compat
+    p50_latency_increase_max: float | None = None
+    cost_per_query_increase_max: float | None = None
 
 
 class PolicyConfig(BaseModel):

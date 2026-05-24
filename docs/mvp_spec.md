@@ -149,19 +149,24 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 - Stored root causes in DuckDB
 - Verified full mock/dev evaluation flow
 
-### Current: Milestone 5A
-Goal: compare two completed runs.
+### Completed: Milestone 5A
+- Implemented `rageval compare`
+- Compared baseline vs candidate metric means
+- Compared overall pass/fail/unknown counts
+- Compared root-cause distributions
+- Added N/A handling for missing metrics
+- Verified manual compare flow
+
+### Current: Milestone 5B
+Goal: add CI-style threshold checking.
 
 Scope:
-- Implement `rageval compare --baseline <run_id> --candidate <run_id>`
-- Compare mean metrics between runs
-- Compare pass/fail/unknown counts
-- Compare root-cause distributions
-- Show metric deltas in a Rich table
-- Do not implement CI gating yet
+- Implement `rageval ci-check --baseline <run_id> --candidate <run_id> --thresholds rageval.yaml`
+- Fail with exit code 1 if candidate regresses beyond configured thresholds
+- Check metric drops, pass-rate drops, latency/cost later if available
+- Print human-readable and machine-readable output
 
 Do not implement yet:
 - HTML report
-- ci-check
-- GitHub Actions
+- GitHub Actions workflow
 - Docker

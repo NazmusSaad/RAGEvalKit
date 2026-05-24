@@ -157,16 +157,29 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 - Added N/A handling for missing metrics
 - Verified manual compare flow
 
-### Current: Milestone 5B
-Goal: add CI-style threshold checking.
+### Completed: Milestone 5B
+- Implemented `rageval ci-check`
+- Added threshold-based pass/fail checks
+- Added absolute metric floors and relative regression checks
+- Added backward-compatible threshold aliases
+- Added `--json` output for CI usage
+- Verified manual CI check flow
+
+### Current: Milestone 6A
+Goal: generate a static HTML report for a completed run.
 
 Scope:
-- Implement `rageval ci-check --baseline <run_id> --candidate <run_id> --thresholds rageval.yaml`
-- Fail with exit code 1 if candidate regresses beyond configured thresholds
-- Check metric drops, pass-rate drops, latency/cost later if available
-- Print human-readable and machine-readable output
+- Implement `rageval report --run <run_id> --output report.html`
+- Show run metadata
+- Show metric summary
+- Show pass/fail/unknown counts
+- Show root-cause distribution
+- Show worst/failing examples if available
+- Show retrieved chunks and claim verdicts per item
+- Produce a self-contained HTML file
 
 Do not implement yet:
-- HTML report
 - GitHub Actions workflow
 - Docker
+- hosted dashboard
+- Streamlit

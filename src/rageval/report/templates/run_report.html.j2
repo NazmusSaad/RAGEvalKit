@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAGEvalKit Report — {{ run.run_id }}</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:#1a1a1a;font-size:14px;line-height:1.5}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+
+    /* ── Header ─────────────────────────────── */
+    .hdr{background:#1e2a3a;color:#fff;border-radius:10px;padding:24px 28px;margin-bottom:24px}
+    .hdr h1{font-size:1.35rem;font-weight:700;margin-bottom:12px}
+    .meta{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:.8rem;color:#aab}
+    .meta strong{color:#ddd}
+
+    /* ── Score cards ─────────────────────────── */
+    .cards{display:flex;gap:16px;margin-bottom:20px}
+    .card{flex:1;background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .card .num{font-size:2.4rem;font-weight:800;line-height:1;margin-bottom:4px}
+    .card .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:1.2px;color:#888}
+    .card.pass .num{color:#22c55e}
+    .card.fail .num{color:#ef4444}
+    .card.unk  .num{color:#94a3b8}
+
+    /* ── Section card ────────────────────────── */
+    .sec{background:#fff;border-radius:10px;padding:20px 24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .sec h2{font-size:.95rem;font-weight:700;color:#333;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #eee}
+
+    /* ── Tables ──────────────────────────────── */
+    table{width:100%;border-collapse:collapse}
+    th{background:#f8f9fa;text-align:left;padding:7px 12px;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;color:#666;border-bottom:1px solid #eee}
+    td{padding:8px 12px;border-bottom:1px solid #f3f3f3;vertical-align:top;font-size:.85rem}
+    tr:last-child td{border-bottom:none}
+
+    /* ── Badges ──────────────────────────────── */
+    .badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:.7rem;font-weight:700;white-space:nowrap}
+    .lbl-pass{background:#dcfce7;color:#15803d}
+    .lbl-fail{background:#fee2e2;color:#b91c1c}
+    .lbl-unknown{background:#e2e8f0;color:#475569}
+    .sta-finished{background:#dcfce7;color:#15803d}
+    .sta-running{background:#dbeafe;color:#1e40af}
+    .sta-failed{background:#fee2e2;color:#b91c1c}
+    .vrd-supported{background:#dcfce7;color:#15803d}
+    .vrd-contradicted{background:#fee2e2;color:#b91c1c}
+    .vrd-not_enough_info{background:#fef9c3;color:#92400e}
+    .vrd-unjudged{background:#e2e8f0;color:#475569}
+    .rc-badge{background:#e0e7ff;color:#3730a3}
+
+    /* ── Items / details ─────────────────────── */
+    .item-list{list-style:none}
+    .item-list li{margin-bottom:8px}
+    details{background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+    summary{padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:8px;flex-wrap:wrap;list-style:none;user-select:none}
+    summary::-webkit-details-marker{display:none}
+    .arrow{font-size:.6rem;color:#aaa;flex-shrink:0;display:inline-block;transition:transform .15s}
+    details[open] .arrow{transform:rotate(90deg)}
+    .q-prev{flex:1;font-size:.85rem;font-weight:500;color:#333}
+    .item-body{padding:16px 20px;border-top:1px solid #f0f0f0}
+
+    /* ── Q&A block ───────────────────────────── */
+    .qa{background:#f9fafb;border-radius:6px;padding:12px 16px;margin-bottom:14px}
+    .qa p{font-size:.85rem;margin-bottom:6px}
+    .qa p:last-child{margin-bottom:0}
+    .qa strong{color:#555}
+
+    /* ── Sub-headings ────────────────────────── */
+    .sub{font-size:.75rem;font-weight:700;text-transform:uppercase;color:#888;letter-spacing:.6px;margin:14px 0 6px}
+
+    /* ── Notes ───────────────────────────────── */
+    .note{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 12px;border-radius:4px;font-size:.8rem;color:#78350f;font-style:italic}
+
+    code{background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:.82em;font-family:monospace}
+    footer{text-align:center;color:#bbb;font-size:.75rem;margin-top:28px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  {# ── Header ──────────────────────────────────────────────────────── #}
+  <header class="hdr">
+    <h1>RAGEvalKit Evaluation Report</h1>
+    <div class="meta">
+      <span><strong>Run ID:</strong> <code>{{ run.run_id }}</code></span>
+      <span><strong>Tag:</strong> {{ run.tag or "—" }}</span>
+      <span><strong>Status:</strong>
+        <span class="badge sta-{{ run.status }}">{{ run.status }}</span>
+      </span>
+      <span><strong>Started:</strong> {{ run.started_at | fmt_dt }}</span>
+      <span><strong>Finished:</strong> {{ run.finished_at | fmt_dt }}</span>
+      {% if run.name %}<span><strong>Name:</strong> {{ run.name }}</span>{% endif %}
+    </div>
+  </header>
+
+  {# ── Score cards ─────────────────────────────────────────────────── #}
+  <div class="cards">
+    <div class="card pass">
+      <div class="num">{{ pass_count }}</div>
+      <div class="lbl">Pass</div>
+    </div>
+    <div class="card fail">
+      <div class="num">{{ fail_count }}</div>
+      <div class="lbl">Fail</div>
+    </div>
+    <div class="card unk">
+      <div class="num">{{ unknown_count }}</div>
+      <div class="lbl">Unknown</div>
+    </div>
+  </div>
+
+  {# ── Metric Summary ───────────────────────────────────────────────── #}
+  <div class="sec">
+    <h2>Metric Summary</h2>
+    {% if metric_rows %}
+    <table>
+      <thead><tr><th>Metric</th><th>Mean Score</th></tr></thead>
+      <tbody>
+        {% for row in metric_rows %}
+        <tr>
+          <td><code>{{ row.name }}</code></td>
+          <td>{{ row.value }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="note">No metrics found. Run evaluators (<code>evaluate-retrieval</code>, <code>evaluate-answer-relevance</code>, <code>evaluate-groundedness</code>) to populate metric scores.</p>
+    {% endif %}
+  </div>
+
+  {# ── Root-Cause Distribution ──────────────────────────────────────── #}
+  <div class="sec">
+    <h2>Root-Cause Distribution</h2>
+    {% if root_cause_distribution %}
+    <table>
+      <thead><tr><th>Cause</th><th>Count</th></tr></thead>
+      <tbody>
+        {% for cause, count in root_cause_distribution.items() %}
+        <tr><td>{{ cause }}</td><td>{{ count }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="note">Root-cause data not found. Run <code>rageval summarize-run --run &lt;run_id&gt;</code> to populate root-cause data.</p>
+    {% endif %}
+  </div>
+
+  {# ── Per-Item Details ─────────────────────────────────────────────── #}
+  <div class="sec">
+    <h2>Items ({{ items | length }})</h2>
+    {% if items %}
+    <ul class="item-list">
+      {% for item in items %}
+      <li>
+        <details>
+          <summary>
+            <span class="arrow">&#9654;</span>
+            <span class="q-prev">
+              {% if item.question | length > 100 %}
+                {{ item.question[:100] }}&#8230;
+              {% else %}
+                {{ item.question }}
+              {% endif %}
+            </span>
+            <span class="badge lbl-{{ item.overall_label }}">{{ item.overall_label }}</span>
+            {% if item.root_cause %}
+            <span class="badge rc-badge">{{ item.root_cause.primary_cause }}</span>
+            {% endif %}
+          </summary>
+          <div class="item-body">
+
+            {# Q&A #}
+            <div class="qa">
+              <p><strong>Question:</strong> {{ item.question }}</p>
+              <p><strong>Generated Answer:</strong> {{ item.generated_answer }}</p>
+              {% if item.reference_answer %}
+              <p><strong>Reference Answer:</strong> {{ item.reference_answer }}</p>
+              {% endif %}
+            </div>
+
+            {# Metric scores #}
+            <p class="sub">Metric Scores</p>
+            {% if item.metrics %}
+            <table>
+              <thead><tr><th>Metric</th><th>Score</th><th>Label</th><th>Reason</th></tr></thead>
+              <tbody>
+                {% for metric_name, ms in item.metrics.items() %}
+                <tr>
+                  <td><code>{{ metric_name }}</code></td>
+                  <td>{{ ms.score | fmt_score }}</td>
+                  <td><span class="badge lbl-{{ ms.label }}">{{ ms.label }}</span></td>
+                  <td>{{ ms.reason }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <p class="note">No metric scores for this item.</p>
+            {% endif %}
+
+            {# Root cause #}
+            {% if item.root_cause %}
+            <p class="sub">Root Cause</p>
+            <p>
+              Primary: <strong>{{ item.root_cause.primary_cause }}</strong>
+              {% if item.root_cause.secondary_causes %}
+              &nbsp;&middot; Secondary: {{ item.root_cause.secondary_causes | join(", ") }}
+              {% endif %}
+            </p>
+            {% if item.root_cause.suggested_fix %}
+            <p style="margin-top:4px;color:#555">Fix: {{ item.root_cause.suggested_fix }}</p>
+            {% endif %}
+            {% endif %}
+
+            {# Retrieved contexts #}
+            <p class="sub">Retrieved Contexts</p>
+            {% if item.contexts %}
+            <table>
+              <thead><tr><th>#</th><th>Chunk ID</th><th>Score</th><th>Text</th></tr></thead>
+              <tbody>
+                {% for ctx in item.contexts %}
+                <tr>
+                  <td>{{ ctx.rank }}</td>
+                  <td><code>{{ ctx.chunk_id[:14] }}&#8230;</code></td>
+                  <td>{{ ctx.score | fmt_score }}</td>
+                  <td>
+                    {% if ctx.chunk_text | length > 200 %}
+                      {{ ctx.chunk_text[:200] }}&#8230;
+                    {% else %}
+                      {{ ctx.chunk_text }}
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <p class="note">No retrieved contexts recorded for this item.</p>
+            {% endif %}
+
+            {# Claims #}
+            <p class="sub">Claims &amp; Groundedness</p>
+            {% if item.claims %}
+            <table>
+              <thead><tr><th>Claim</th><th>Verdict</th><th>Supporting Chunks</th><th>Rationale</th></tr></thead>
+              <tbody>
+                {% for claim in item.claims %}
+                <tr>
+                  <td>{{ claim.claim_text }}</td>
+                  <td><span class="badge vrd-{{ claim.verdict }}">{{ claim.verdict }}</span></td>
+                  <td>
+                    {% if claim.supporting_chunk_ids %}
+                      {{ claim.supporting_chunk_ids | join(", ") }}
+                    {% else %}
+                      &mdash;
+                    {% endif %}
+                  </td>
+                  <td>{{ claim.rationale or "&mdash;" }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% else %}
+            <p class="note">Claim-level data not found. Run <code>rageval extract-claims</code> and <code>rageval evaluate-groundedness</code> to populate claim-level data.</p>
+            {% endif %}
+
+          </div>{# /item-body #}
+        </details>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="note">No items found for this run.</p>
+    {% endif %}
+  </div>
+
+  <footer>
+    <p>Generated by RAGEvalKit &mdash; run <code>{{ run.run_id }}</code></p>
+  </footer>
+
+</div>{# /wrap #}
+</body>
+</html>

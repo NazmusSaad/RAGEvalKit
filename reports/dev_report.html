@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAGEvalKit Report — 78df1bb511d14848b353866d90de309d</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:#1a1a1a;font-size:14px;line-height:1.5}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+
+    /* ── Header ─────────────────────────────── */
+    .hdr{background:#1e2a3a;color:#fff;border-radius:10px;padding:24px 28px;margin-bottom:24px}
+    .hdr h1{font-size:1.35rem;font-weight:700;margin-bottom:12px}
+    .meta{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:.8rem;color:#aab}
+    .meta strong{color:#ddd}
+
+    /* ── Score cards ─────────────────────────── */
+    .cards{display:flex;gap:16px;margin-bottom:20px}
+    .card{flex:1;background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .card .num{font-size:2.4rem;font-weight:800;line-height:1;margin-bottom:4px}
+    .card .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:1.2px;color:#888}
+    .card.pass .num{color:#22c55e}
+    .card.fail .num{color:#ef4444}
+    .card.unk  .num{color:#94a3b8}
+
+    /* ── Section card ────────────────────────── */
+    .sec{background:#fff;border-radius:10px;padding:20px 24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .sec h2{font-size:.95rem;font-weight:700;color:#333;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #eee}
+
+    /* ── Tables ──────────────────────────────── */
+    table{width:100%;border-collapse:collapse}
+    th{background:#f8f9fa;text-align:left;padding:7px 12px;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;color:#666;border-bottom:1px solid #eee}
+    td{padding:8px 12px;border-bottom:1px solid #f3f3f3;vertical-align:top;font-size:.85rem}
+    tr:last-child td{border-bottom:none}
+
+    /* ── Badges ──────────────────────────────── */
+    .badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:.7rem;font-weight:700;white-space:nowrap}
+    .lbl-pass{background:#dcfce7;color:#15803d}
+    .lbl-fail{background:#fee2e2;color:#b91c1c}
+    .lbl-unknown{background:#e2e8f0;color:#475569}
+    .sta-finished{background:#dcfce7;color:#15803d}
+    .sta-running{background:#dbeafe;color:#1e40af}
+    .sta-failed{background:#fee2e2;color:#b91c1c}
+    .vrd-supported{background:#dcfce7;color:#15803d}
+    .vrd-contradicted{background:#fee2e2;color:#b91c1c}
+    .vrd-not_enough_info{background:#fef9c3;color:#92400e}
+    .vrd-unjudged{background:#e2e8f0;color:#475569}
+    .rc-badge{background:#e0e7ff;color:#3730a3}
+
+    /* ── Items / details ─────────────────────── */
+    .item-list{list-style:none}
+    .item-list li{margin-bottom:8px}
+    details{background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+    summary{padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:8px;flex-wrap:wrap;list-style:none;user-select:none}
+    summary::-webkit-details-marker{display:none}
+    .arrow{font-size:.6rem;color:#aaa;flex-shrink:0;display:inline-block;transition:transform .15s}
+    details[open] .arrow{transform:rotate(90deg)}
+    .q-prev{flex:1;font-size:.85rem;font-weight:500;color:#333}
+    .item-body{padding:16px 20px;border-top:1px solid #f0f0f0}
+
+    /* ── Q&A block ───────────────────────────── */
+    .qa{background:#f9fafb;border-radius:6px;padding:12px 16px;margin-bottom:14px}
+    .qa p{font-size:.85rem;margin-bottom:6px}
+    .qa p:last-child{margin-bottom:0}
+    .qa strong{color:#555}
+
+    /* ── Sub-headings ────────────────────────── */
+    .sub{font-size:.75rem;font-weight:700;text-transform:uppercase;color:#888;letter-spacing:.6px;margin:14px 0 6px}
+
+    /* ── Notes ───────────────────────────────── */
+    .note{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 12px;border-radius:4px;font-size:.8rem;color:#78350f;font-style:italic}
+
+    code{background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:.82em;font-family:monospace}
+    footer{text-align:center;color:#bbb;font-size:.75rem;margin-top:28px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  
+  <header class="hdr">
+    <h1>RAGEvalKit Evaluation Report</h1>
+    <div class="meta">
+      <span><strong>Run ID:</strong> <code>78df1bb511d14848b353866d90de309d</code></span>
+      <span><strong>Tag:</strong> baseline</span>
+      <span><strong>Status:</strong>
+        <span class="badge sta-completed">completed</span>
+      </span>
+      <span><strong>Started:</strong> 2026-05-22 21:08 UTC</span>
+      <span><strong>Finished:</strong> 2026-05-22 21:08 UTC</span>
+      <span><strong>Name:</strong> baseline-run</span>
+    </div>
+  </header>
+
+  
+  <div class="cards">
+    <div class="card pass">
+      <div class="num">3</div>
+      <div class="lbl">Pass</div>
+    </div>
+    <div class="card fail">
+      <div class="num">0</div>
+      <div class="lbl">Fail</div>
+    </div>
+    <div class="card unk">
+      <div class="num">0</div>
+      <div class="lbl">Unknown</div>
+    </div>
+  </div>
+
+  
+  <div class="sec">
+    <h2>Metric Summary</h2>
+    
+    <table>
+      <thead><tr><th>Metric</th><th>Mean Score</th></tr></thead>
+      <tbody>
+        
+        <tr>
+          <td><code>recall_at_k</code></td>
+          <td>1.000</td>
+        </tr>
+        
+        <tr>
+          <td><code>mrr</code></td>
+          <td>0.444</td>
+        </tr>
+        
+        <tr>
+          <td><code>answer_relevance</code></td>
+          <td>0.750</td>
+        </tr>
+        
+        <tr>
+          <td><code>faithfulness</code></td>
+          <td>1.000</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    
+  </div>
+
+  
+  <div class="sec">
+    <h2>Root-Cause Distribution</h2>
+    
+    <table>
+      <thead><tr><th>Cause</th><th>Count</th></tr></thead>
+      <tbody>
+        
+        <tr><td>none</td><td>3</td></tr>
+        
+      </tbody>
+    </table>
+    
+  </div>
+
+  
+  <div class="sec">
+    <h2>Items (3)</h2>
+    
+    <ul class="item-list">
+      
+      <li>
+        <details>
+          <summary>
+            <span class="arrow">&#9654;</span>
+            <span class="q-prev">
+              
+                What is the main concept described in this passage?
+              
+            </span>
+            <span class="badge lbl-pass">pass</span>
+            
+            <span class="badge rc-badge">none</span>
+            
+          </summary>
+          <div class="item-body">
+
+            
+            <div class="qa">
+              <p><strong>Question:</strong> What is the main concept described in this passage?</p>
+              <p><strong>Generated Answer:</strong> {&#34;questions&#34;: [{&#34;question&#34;: &#34;What is the main concept described in this passage?&#34;, &#34;reference_answer&#34;: &#34;The passage describes the primary concept at hand.&#34;, &#34;qtype&#34;: &#34;factoid&#34;, &#34;difficulty&#34;: &#34;easy&#34;}, {&#34;question&#34;: &#34;How do the components described relate to the overall process?&#34;, &#34;reference_answer&#34;: &#34;The components interact through the described mechanism.&#34;, &#34;qtype&#34;: &#34;reasoning&#34;, &#34;difficulty&#34;: &#34;medium&#34;}]}</p>
+              
+              <p><strong>Reference Answer:</strong> The passage describes the primary concept at hand.</p>
+              
+            </div>
+
+            
+            <p class="sub">Metric Scores</p>
+            
+            <table>
+              <thead><tr><th>Metric</th><th>Score</th><th>Label</th><th>Reason</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td><code>recall_at_k</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>source found in top-3</td>
+                </tr>
+                
+                <tr>
+                  <td><code>mrr</code></td>
+                  <td>0.333</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>first relevant at rank 3</td>
+                </tr>
+                
+                <tr>
+                  <td><code>answer_relevance</code></td>
+                  <td>0.750</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>Mock answer addresses the question.</td>
+                </tr>
+                
+                <tr>
+                  <td><code>faithfulness</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>2/2 claims supported (faithfulness=1.000)</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            
+            <p class="sub">Root Cause</p>
+            <p>
+              Primary: <strong>none</strong>
+              
+            </p>
+            
+            
+
+            
+            <p class="sub">Retrieved Contexts</p>
+            
+            <table>
+              <thead><tr><th>#</th><th>Chunk ID</th><th>Score</th><th>Text</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>0</td>
+                  <td><code>ea0d3f484f18d2&#8230;</code></td>
+                  <td>0.232</td>
+                  <td>
+                    
+                      # Retrieval-Augmented Generation
+
+RAG combines a retrieval step with text generation. A query is used to retrieve relevant passages from a document corpus. Those passages are injected into the prompt &#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>1</td>
+                  <td><code>cf75f4324ed960&#8230;</code></td>
+                  <td>-0.116</td>
+                  <td>
+                    
+                      # Evaluating RAG Systems
+
+RAG evaluation measures both retrieval quality and answer quality. Retrieval relevance checks whether the retrieved chunks are useful for answering the query. Faithfulness ch&#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>2</td>
+                  <td><code>9ea65a41d4b2b9&#8230;</code></td>
+                  <td>-0.177</td>
+                  <td>
+                    
+                      # Common RAG Failure Modes
+
+Retrieval failures occur when the relevant chunk is not surfaced in the top-k results. Grounding failures occur when the model generates claims not supported by the retriev&#8230;
+                    
+                  </td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            <p class="sub">Claims &amp; Groundedness</p>
+            
+            <table>
+              <thead><tr><th>Claim</th><th>Verdict</th><th>Supporting Chunks</th><th>Rationale</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>The answer addresses the question.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      ea0d3f484f18d2627ec8a0d1c745821b6f67501555c7bf45147b6b106a6d1b0b
+                    
+                  </td>
+                  <td>Mock claim is treated as supported by the top context.</td>
+                </tr>
+                
+                <tr>
+                  <td>The response is generated by a mock model.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      ea0d3f484f18d2627ec8a0d1c745821b6f67501555c7bf45147b6b106a6d1b0b
+                    
+                  </td>
+                  <td>Mock claim is treated as supported by the top context.</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+          </div>
+        </details>
+      </li>
+      
+      <li>
+        <details>
+          <summary>
+            <span class="arrow">&#9654;</span>
+            <span class="q-prev">
+              
+                How do the components described relate to the overall process?
+              
+            </span>
+            <span class="badge lbl-pass">pass</span>
+            
+            <span class="badge rc-badge">none</span>
+            
+          </summary>
+          <div class="item-body">
+
+            
+            <div class="qa">
+              <p><strong>Question:</strong> How do the components described relate to the overall process?</p>
+              <p><strong>Generated Answer:</strong> {&#34;questions&#34;: [{&#34;question&#34;: &#34;What is the main concept described in this passage?&#34;, &#34;reference_answer&#34;: &#34;The passage describes the primary concept at hand.&#34;, &#34;qtype&#34;: &#34;factoid&#34;, &#34;difficulty&#34;: &#34;easy&#34;}, {&#34;question&#34;: &#34;How do the components described relate to the overall process?&#34;, &#34;reference_answer&#34;: &#34;The components interact through the described mechanism.&#34;, &#34;qtype&#34;: &#34;reasoning&#34;, &#34;difficulty&#34;: &#34;medium&#34;}]}</p>
+              
+              <p><strong>Reference Answer:</strong> The components interact through the described mechanism.</p>
+              
+            </div>
+
+            
+            <p class="sub">Metric Scores</p>
+            
+            <table>
+              <thead><tr><th>Metric</th><th>Score</th><th>Label</th><th>Reason</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td><code>recall_at_k</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>source found in top-3</td>
+                </tr>
+                
+                <tr>
+                  <td><code>mrr</code></td>
+                  <td>0.500</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>first relevant at rank 2</td>
+                </tr>
+                
+                <tr>
+                  <td><code>answer_relevance</code></td>
+                  <td>0.750</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>Mock answer addresses the question.</td>
+                </tr>
+                
+                <tr>
+                  <td><code>faithfulness</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>2/2 claims supported (faithfulness=1.000)</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            
+            <p class="sub">Root Cause</p>
+            <p>
+              Primary: <strong>none</strong>
+              
+            </p>
+            
+            
+
+            
+            <p class="sub">Retrieved Contexts</p>
+            
+            <table>
+              <thead><tr><th>#</th><th>Chunk ID</th><th>Score</th><th>Text</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>0</td>
+                  <td><code>cf75f4324ed960&#8230;</code></td>
+                  <td>0.328</td>
+                  <td>
+                    
+                      # Evaluating RAG Systems
+
+RAG evaluation measures both retrieval quality and answer quality. Retrieval relevance checks whether the retrieved chunks are useful for answering the query. Faithfulness ch&#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>1</td>
+                  <td><code>9ea65a41d4b2b9&#8230;</code></td>
+                  <td>0.299</td>
+                  <td>
+                    
+                      # Common RAG Failure Modes
+
+Retrieval failures occur when the relevant chunk is not surfaced in the top-k results. Grounding failures occur when the model generates claims not supported by the retriev&#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>2</td>
+                  <td><code>ea0d3f484f18d2&#8230;</code></td>
+                  <td>-0.162</td>
+                  <td>
+                    
+                      # Retrieval-Augmented Generation
+
+RAG combines a retrieval step with text generation. A query is used to retrieve relevant passages from a document corpus. Those passages are injected into the prompt &#8230;
+                    
+                  </td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            <p class="sub">Claims &amp; Groundedness</p>
+            
+            <table>
+              <thead><tr><th>Claim</th><th>Verdict</th><th>Supporting Chunks</th><th>Rationale</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>The answer addresses the question.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      cf75f4324ed960975b7861b43f71e6c1bbbc32b6ddb4b5637b97ff10dd4890da
+                    
+                  </td>
+                  <td>Mock claim is treated as supported by the top context.</td>
+                </tr>
+                
+                <tr>
+                  <td>The response is generated by a mock model.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      cf75f4324ed960975b7861b43f71e6c1bbbc32b6ddb4b5637b97ff10dd4890da
+                    
+                  </td>
+                  <td>Mock claim is treated as supported by the top context.</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+          </div>
+        </details>
+      </li>
+      
+      <li>
+        <details>
+          <summary>
+            <span class="arrow">&#9654;</span>
+            <span class="q-prev">
+              
+                What is the main concept described in this passage?
+              
+            </span>
+            <span class="badge lbl-pass">pass</span>
+            
+            <span class="badge rc-badge">none</span>
+            
+          </summary>
+          <div class="item-body">
+
+            
+            <div class="qa">
+              <p><strong>Question:</strong> What is the main concept described in this passage?</p>
+              <p><strong>Generated Answer:</strong> {&#34;questions&#34;: [{&#34;question&#34;: &#34;What is the main concept described in this passage?&#34;, &#34;reference_answer&#34;: &#34;The passage describes the primary concept at hand.&#34;, &#34;qtype&#34;: &#34;factoid&#34;, &#34;difficulty&#34;: &#34;easy&#34;}, {&#34;question&#34;: &#34;How do the components described relate to the overall process?&#34;, &#34;reference_answer&#34;: &#34;The components interact through the described mechanism.&#34;, &#34;qtype&#34;: &#34;reasoning&#34;, &#34;difficulty&#34;: &#34;medium&#34;}]}</p>
+              
+              <p><strong>Reference Answer:</strong> The passage describes the primary concept at hand.</p>
+              
+            </div>
+
+            
+            <p class="sub">Metric Scores</p>
+            
+            <table>
+              <thead><tr><th>Metric</th><th>Score</th><th>Label</th><th>Reason</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td><code>recall_at_k</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>source found in top-3</td>
+                </tr>
+                
+                <tr>
+                  <td><code>mrr</code></td>
+                  <td>0.500</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>first relevant at rank 2</td>
+                </tr>
+                
+                <tr>
+                  <td><code>answer_relevance</code></td>
+                  <td>0.750</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>Mock answer addresses the question.</td>
+                </tr>
+                
+                <tr>
+                  <td><code>faithfulness</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>2/2 claims supported (faithfulness=1.000)</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            
+            <p class="sub">Root Cause</p>
+            <p>
+              Primary: <strong>none</strong>
+              
+            </p>
+            
+            
+
+            
+            <p class="sub">Retrieved Contexts</p>
+            
+            <table>
+              <thead><tr><th>#</th><th>Chunk ID</th><th>Score</th><th>Text</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>0</td>
+                  <td><code>ea0d3f484f18d2&#8230;</code></td>
+                  <td>0.232</td>
+                  <td>
+                    
+                      # Retrieval-Augmented Generation
+
+RAG combines a retrieval step with text generation. A query is used to retrieve relevant passages from a document corpus. Those passages are injected into the prompt &#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>1</td>
+                  <td><code>cf75f4324ed960&#8230;</code></td>
+                  <td>-0.116</td>
+                  <td>
+                    
+                      # Evaluating RAG Systems
+
+RAG evaluation measures both retrieval quality and answer quality. Retrieval relevance checks whether the retrieved chunks are useful for answering the query. Faithfulness ch&#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>2</td>
+                  <td><code>9ea65a41d4b2b9&#8230;</code></td>
+                  <td>-0.177</td>
+                  <td>
+                    
+                      # Common RAG Failure Modes
+
+Retrieval failures occur when the relevant chunk is not surfaced in the top-k results. Grounding failures occur when the model generates claims not supported by the retriev&#8230;
+                    
+                  </td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            <p class="sub">Claims &amp; Groundedness</p>
+            
+            <table>
+              <thead><tr><th>Claim</th><th>Verdict</th><th>Supporting Chunks</th><th>Rationale</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>The answer addresses the question.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      ea0d3f484f18d2627ec8a0d1c745821b6f67501555c7bf45147b6b106a6d1b0b
+                    
+                  </td>
+                  <td>Mock claim is treated as supported by the top context.</td>
+                </tr>
+                
+                <tr>
+                  <td>The response is generated by a mock model.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      ea0d3f484f18d2627ec8a0d1c745821b6f67501555c7bf45147b6b106a6d1b0b
+                    
+                  </td>
+                  <td>Mock claim is treated as supported by the top context.</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+          </div>
+        </details>
+      </li>
+      
+    </ul>
+    
+  </div>
+
+  <footer>
+    <p>Generated by RAGEvalKit &mdash; run <code>78df1bb511d14848b353866d90de309d</code></p>
+  </footer>
+
+</div>
+</body>
+</html>

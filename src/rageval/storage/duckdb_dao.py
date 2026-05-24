@@ -547,6 +547,30 @@ def get_root_causes_for_run(
     ]
 
 
+def get_run_items_for_report(
+    con: duckdb.DuckDBPyConnection,
+    run_id: str,
+) -> list[dict]:
+    """Return items with question, generated answer, and reference answer for *run_id*."""
+    rows = con.execute(
+        "SELECT ri.item_id, ri.question_id, eq.question, ri.generated_answer, eq.reference_answer"
+        " FROM run_items ri"
+        " LEFT JOIN eval_questions eq ON ri.question_id = eq.question_id"
+        " WHERE ri.run_id = ?",
+        [run_id],
+    ).fetchall()
+    return [
+        {
+            "item_id": row[0],
+            "question_id": row[1],
+            "question": row[2] or "",
+            "generated_answer": row[3] or "",
+            "reference_answer": row[4] or "",
+        }
+        for row in rows
+    ]
+
+
 def get_run_metric_means(
     con: duckdb.DuckDBPyConnection,
     run_id: str,

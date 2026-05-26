@@ -1,1 +1,14 @@
+# RAGEvalKit generated artifacts
 .rageval/
+evalsets/
+reports/
+
+# Python/cache
+__pycache__/
+*.pyc
+.pytest_cache/
+.cache/
+
+# Environment/secrets
+.env
+.venv/

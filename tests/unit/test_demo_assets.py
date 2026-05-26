@@ -176,6 +176,95 @@ class TestDemoScripts:
         assert not re.search(r"sk-[A-Za-z0-9]{20,}", text), "API key appears hardcoded in PowerShell script"
 
 
+class TestMockDemoScript:
+    def test_mock_demo_script_exists(self):
+        assert (ROOT / "examples" / "demo_commands.ps1").is_file()
+
+    def test_mock_demo_script_has_no_api_key_requirement(self):
+        text = (ROOT / "examples" / "demo_commands.ps1").read_text(encoding="utf-8")
+        assert "OPENAI_API_KEY" not in text
+
+    def test_mock_demo_script_runs_core_commands(self):
+        text = (ROOT / "examples" / "demo_commands.ps1").read_text(encoding="utf-8")
+        for cmd in (
+            "rageval init",
+            "rageval ingest",
+            "rageval run",
+            "rageval evaluate-retrieval",
+            "rageval summarize-run",
+            "rageval report",
+        ):
+            assert cmd in text, f"Missing command: {cmd}"
+
+    def test_mock_demo_script_captures_run_id(self):
+        text = (ROOT / "examples" / "demo_commands.ps1").read_text(encoding="utf-8")
+        assert "RUN_ID" in text
+        assert "runs.db" in text
+
+    def test_mock_demo_script_sets_error_action_stop(self):
+        text = (ROOT / "examples" / "demo_commands.ps1").read_text(encoding="utf-8")
+        assert "ErrorActionPreference" in text
+        assert "Stop" in text
+
+    def test_mock_demo_script_no_hardcoded_api_key(self):
+        text = (ROOT / "examples" / "demo_commands.ps1").read_text(encoding="utf-8")
+        assert not re.search(r"sk-[A-Za-z0-9]{20,}", text)
+
+
+class TestDocPages:
+    def test_architecture_doc_exists(self):
+        assert (ROOT / "docs" / "architecture.md").is_file()
+
+    def test_cli_doc_exists(self):
+        assert (ROOT / "docs" / "cli.md").is_file()
+
+    def test_metrics_doc_exists(self):
+        assert (ROOT / "docs" / "metrics.md").is_file()
+
+    def test_demo_script_doc_exists(self):
+        assert (ROOT / "docs" / "demo_script.md").is_file()
+
+    def test_architecture_doc_mentions_duckdb_and_chroma(self):
+        text = (ROOT / "docs" / "architecture.md").read_text(encoding="utf-8")
+        assert "DuckDB" in text
+        assert "Chroma" in text
+
+    def test_cli_doc_covers_all_commands(self):
+        text = (ROOT / "docs" / "cli.md").read_text(encoding="utf-8")
+        for cmd in ("rageval init", "rageval ingest", "rageval run", "rageval ci-check", "rageval report"):
+            assert cmd in text, f"cli.md missing: {cmd}"
+
+    def test_metrics_doc_covers_all_four_metrics(self):
+        text = (ROOT / "docs" / "metrics.md").read_text(encoding="utf-8")
+        for term in ("recall@k", "MRR", "answer_relevance", "faithfulness"):
+            assert term in text, f"metrics.md missing: {term}"
+
+    def test_readme_exists(self):
+        assert (ROOT / "README.md").is_file()
+
+    def test_readme_references_screenshots(self):
+        text = (ROOT / "README.md").read_text(encoding="utf-8")
+        assert "report_summary_live_demo.png" in text
+        assert "report_retrieval_failure_case.png" in text
+        assert "report_success_case.png" in text
+
+    def test_readme_screenshot_paths_exist(self):
+        for name in (
+            "report_summary_live_demo.png",
+            "report_retrieval_failure_case.png",
+            "report_success_case.png",
+        ):
+            assert (ROOT / "docs" / "assets" / name).is_file(), f"Missing: {name}"
+
+    def test_readme_contains_mermaid_diagram(self):
+        text = (ROOT / "README.md").read_text(encoding="utf-8")
+        assert "```mermaid" in text
+
+    def test_readme_contains_project_summary(self):
+        text = (ROOT / "README.md").read_text(encoding="utf-8")
+        assert "714 tests" in text or "tests" in text.lower()
+
+
 class TestLiveDemoDoc:
     def test_live_demo_doc_exists(self):
         assert (ROOT / "docs" / "live_demo.md").is_file()

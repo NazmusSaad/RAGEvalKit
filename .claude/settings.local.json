@@ -15,7 +15,8 @@
       "Bash(python -m pytest --tb=short -q)",
       "Bash(python -m pytest tests/unit/test_report_render.py tests/integration/test_cli_report.py -v)",
       "Bash(python -m pytest tests/unit/test_demo_assets.py -v)",
-      "Bash(python -m pytest tests/unit/test_demo_assets.py -v --tb=short -q)"
+      "Bash(python -m pytest tests/unit/test_demo_assets.py -v --tb=short -q)",
+      "Bash(python -c \"import tomllib; data = tomllib.loads\\(open\\('pyproject.toml'\\).read\\(\\)\\); print\\(data['project']['optional-dependencies']\\)\")"
     ]
   }
 }

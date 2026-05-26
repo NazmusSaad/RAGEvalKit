@@ -39,7 +39,7 @@ jobs:
           cache: pip
 
       - name: Install package
-        run: pip install -e ".[dev]"
+        run: pip install -e "."
 
       - name: Verify CLI loads
         run: rageval --help

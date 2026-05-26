@@ -1,0 +1,129 @@
+name: Live Demo (OpenAI)
+
+# Manual trigger only. Never runs on push or pull_request.
+# Requires OPENAI_API_KEY to be configured as a repository secret.
+# See: Settings → Secrets and variables → Actions → New repository secret
+#
+# Why manual-only?
+#   Real LLM calls cost money and are non-deterministic. Running them on every
+#   commit would burn API quota on noise (formatting fixes, doc updates, etc.)
+#   and make CI flaky due to LLM output variability. The default `tests` workflow
+#   covers correctness with MockLLMClient; this workflow validates the live path
+#   on demand before important releases or after provider changes.
+
+on:
+  workflow_dispatch:
+    inputs:
+      num_questions:
+        description: "Number of eval questions to generate"
+        required: false
+        default: "5"
+      limit:
+        description: "Number of questions to run through the RAG pipeline"
+        required: false
+        default: "3"
+
+jobs:
+  live-demo:
+    name: Live OpenAI demo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install package
+        run: pip install -e ".[dev]"
+
+      - name: Verify CLI loads
+        run: rageval --help
+
+      - name: Run live demo pipeline
+        env:
+          # Secret injected from GitHub repository secrets.
+          # Never printed or stored. GitHub Actions masks it in log output.
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          NUM_QUESTIONS: ${{ github.event.inputs.num_questions }}
+          LIMIT: ${{ github.event.inputs.limit }}
+        run: |
+          set -euo pipefail
+
+          CONFIG="examples/configs/demo_openai.yaml"
+          CORPUS="examples/demo-corpus"
+          EVALSET="evalsets/live_ci.jsonl"
+          REPORT="reports/live_demo_report.html"
+
+          echo "▶ [1/10] init"
+          rageval init
+
+          echo "▶ [2/10] ingest"
+          rageval ingest "$CORPUS" --config "$CONFIG"
+
+          echo "▶ [3/10] generate-evalset (${NUM_QUESTIONS} questions)"
+          rageval generate-evalset "$CORPUS" \
+            --num-questions "$NUM_QUESTIONS" \
+            --output "$EVALSET" \
+            --config "$CONFIG"
+
+          echo "▶ [4/10] run (limit ${LIMIT})"
+          rageval run \
+            --config "$CONFIG" \
+            --evalset "$EVALSET" \
+            --tag "ci-live-demo" \
+            --limit "$LIMIT"
+
+          RUN_ID=$(python - <<'EOF'
+          import duckdb, sys
+          try:
+              con = duckdb.connect(".rageval/runs.db")
+              row = con.execute(
+                  "SELECT run_id FROM runs ORDER BY started_at DESC LIMIT 1"
+              ).fetchone()
+              con.close()
+              print(row[0] if row else "")
+          except Exception as e:
+              print("", file=sys.stderr)
+              sys.exit(1)
+          EOF
+          )
+
+          if [ -z "$RUN_ID" ]; then
+            echo "ERROR: Could not determine run ID"
+            exit 1
+          fi
+          echo "Run ID: $RUN_ID"
+
+          echo "▶ [5/10] evaluate-retrieval"
+          rageval evaluate-retrieval --run "$RUN_ID"
+
+          echo "▶ [6/10] evaluate-answer-relevance"
+          rageval evaluate-answer-relevance --run "$RUN_ID" --config "$CONFIG"
+
+          echo "▶ [7/10] extract-claims"
+          rageval extract-claims --run "$RUN_ID" --config "$CONFIG"
+
+          echo "▶ [8/10] evaluate-groundedness"
+          rageval evaluate-groundedness --run "$RUN_ID" --config "$CONFIG"
+
+          echo "▶ [9/10] summarize-run"
+          rageval summarize-run --run "$RUN_ID"
+
+          echo "▶ [10/10] report"
+          mkdir -p reports
+          rageval report --run "$RUN_ID" --output "$REPORT"
+
+          echo "Done. Report written to $REPORT"
+
+      - name: Upload HTML report artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-demo-report
+          path: reports/live_demo_report.html
+          retention-days: 30

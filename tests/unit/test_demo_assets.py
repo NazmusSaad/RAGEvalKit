@@ -265,6 +265,58 @@ class TestDocPages:
         assert "714 tests" in text or "tests" in text.lower()
 
 
+class TestCIWorkflows:
+    def test_tests_workflow_exists(self):
+        assert (ROOT / ".github" / "workflows" / "tests.yml").is_file()
+
+    def test_live_demo_workflow_exists(self):
+        assert (ROOT / ".github" / "workflows" / "live-demo.yml").is_file()
+
+    def test_tests_workflow_triggers_on_push_and_pr(self):
+        text = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
+        assert "push" in text
+        assert "pull_request" in text
+
+    def test_live_demo_workflow_triggers_only_on_dispatch(self):
+        import yaml as _yaml
+        data = _yaml.safe_load(
+            (ROOT / ".github" / "workflows" / "live-demo.yml").read_text(encoding="utf-8")
+        )
+        triggers = data.get("on", data.get(True, {}))
+        assert "workflow_dispatch" in triggers, "live-demo.yml must use workflow_dispatch"
+        assert "push" not in triggers, "live-demo.yml must not trigger on push"
+        assert "pull_request" not in triggers, "live-demo.yml must not trigger on pull_request"
+
+    def test_tests_workflow_does_not_set_openai_key(self):
+        # The secret must not be injected as an env var in the default tests workflow.
+        text = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
+        assert "secrets.OPENAI_API_KEY" not in text
+
+    def test_live_demo_workflow_uses_secret_for_api_key(self):
+        text = (ROOT / ".github" / "workflows" / "live-demo.yml").read_text(encoding="utf-8")
+        assert "secrets.OPENAI_API_KEY" in text
+        # must not hardcode a real key
+        assert not __import__("re").search(r"sk-[A-Za-z0-9]{20,}", text)
+
+    def test_tests_workflow_uses_ubuntu_and_python311(self):
+        text = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
+        assert "ubuntu-latest" in text
+        assert "3.11" in text
+
+    def test_live_demo_workflow_uploads_artifact(self):
+        text = (ROOT / ".github" / "workflows" / "live-demo.yml").read_text(encoding="utf-8")
+        assert "upload-artifact" in text
+        assert "live_demo_report.html" in text
+
+    def test_tests_workflow_runs_pytest(self):
+        text = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
+        assert "pytest" in text
+
+    def test_tests_workflow_checks_cli_help(self):
+        text = (ROOT / ".github" / "workflows" / "tests.yml").read_text(encoding="utf-8")
+        assert "rageval --help" in text
+
+
 class TestLiveDemoDoc:
     def test_live_demo_doc_exists(self):
         assert (ROOT / "docs" / "live_demo.md").is_file()

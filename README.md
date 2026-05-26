@@ -58,6 +58,21 @@ pip install -e ".[dev]"
 
 ---
 
+## CI
+
+<!-- After pushing to GitHub, replace the URL below with your actual repo path:
+![Tests](https://github.com/NazmusSaad/RAGEvalKit/actions/workflows/tests.yml/badge.svg)
+-->
+
+Two workflows ship with the repo:
+
+- **`tests.yml`** — runs on every push and PR. Mock-only (`DummyEmbedder` + `MockLLMClient`). No API key, no model downloads, deterministic. Covers all 700+ tests.
+- **`live-demo.yml`** — manual trigger only (`workflow_dispatch`). Requires `OPENAI_API_KEY` as a repository secret. Runs the full 10-step OpenAI pipeline and uploads the HTML report as an artifact.
+
+See [docs/demo_script.md](docs/demo_script.md#github-actions-ci-workflows) for setup instructions including how to add the `OPENAI_API_KEY` secret.
+
+---
+
 ## Quickstart: Mock/Dev Mode (no API key required)
 
 The fastest way to see the full pipeline. Uses a deterministic `DummyEmbedder` and a `MockLLMClient` — no model downloads, no API calls.

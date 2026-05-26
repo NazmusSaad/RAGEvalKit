@@ -182,15 +182,45 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 - Verified full live demo pipeline with real generated answers and judge outputs
 - Produced meaningful HTML report showing pass/fail metrics and root-cause diagnosis
 
-### Current: Milestone 7A
-Goal: polish the GitHub/recruiter-facing MVP.
+### Completed: Milestone 7A
+- Rewrote README for a recruiter/GitHub-facing MVP
+- Added architecture, CLI, metrics, and demo documentation
+- Added screenshots from the live HTML report
+- Added mock/dev demo commands
+- Explained the live retrieval failure case
+- Documented current limitations and roadmap
+
+### Current: Milestone 7B
+Goal: add GitHub Actions workflows for automated testing and optional live-demo validation.
 
 Scope:
-- Improve README
-- Add quickstart commands
-- Add architecture diagram
-- Add screenshots from the live report
-- Add sample output snippets
-- Add demo script instructions
-- Add sample report artifact
-- Document current limitations and roadmap
+- Add default GitHub Actions test workflow:
+  - run on push and pull_request
+  - use Python 3.11
+  - use ubuntu-latest initially
+  - install RAGEvalKit
+  - run `pytest`
+  - run `rageval --help`
+  - use only DummyEmbedder and MockLLMClient paths
+  - require no API keys or secrets
+
+- Add optional manual live-demo workflow:
+  - trigger only with `workflow_dispatch`
+  - require `OPENAI_API_KEY` GitHub secret
+  - run the tiny live OpenAI demo
+  - generate the HTML report
+  - upload the report as a GitHub Actions artifact
+  - do not run on normal push/PR
+
+- Update README/docs to explain:
+  - default CI is mock-only and deterministic
+  - live provider validation is manual/opt-in
+  - how to configure the `OPENAI_API_KEY` repository secret
+
+Do not implement yet:
+- Docker
+- hosted dashboard
+- Streamlit
+- new model providers
+- new evaluators
+- automatic paid OpenAI calls on every push

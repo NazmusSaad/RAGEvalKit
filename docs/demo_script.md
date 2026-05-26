@@ -124,3 +124,63 @@ The demo corpus (`examples/demo-corpus/`) contains three Markdown documents:
 | `03_ci_regression_testing.md` | CI regression testing, absolute/relative thresholds, exit codes, recommended workflow |
 
 These documents are self-referential: the corpus describes the framework you're evaluating with. This makes it easy to verify that generated answers are reasonable without domain expertise.
+
+---
+
+## GitHub Actions CI Workflows
+
+RAGEvalKit ships two workflow files under `.github/workflows/`:
+
+### `tests.yml` — Default CI (mock-only, runs on every push/PR)
+
+```yaml
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+```
+
+- Uses `ubuntu-latest` and Python 3.11
+- Installs the package with `pip install -e ".[dev]"` (pip cache enabled)
+- Runs `rageval --help` and the full pytest suite
+- **Does not set `OPENAI_API_KEY`**; no real API calls are made
+- **Does not download any embedding models**; all tests use `DummyEmbedder` and `MockLLMClient`
+- Deterministic and free to run on every commit
+
+### `live-demo.yml` — Optional live validation (manual trigger only)
+
+```yaml
+on:
+  workflow_dispatch:
+    inputs:
+      num_questions: ...
+      limit: ...
+```
+
+- Triggered manually from the GitHub Actions tab
+- Requires `OPENAI_API_KEY` configured as a GitHub repository secret
+- Runs the full 10-step pipeline on the demo corpus
+- Uploads `reports/live_demo_report.html` as a downloadable Actions artifact (retained 30 days)
+- **Never runs on push or pull_request**
+
+### Why live LLM evaluation should not run on every push
+
+Running real LLM calls in default CI has several problems:
+
+1. **Cost**: every commit (including docs and formatting changes) burns API quota
+2. **Flakiness**: LLM outputs are non-deterministic; the same input can produce different scores on consecutive runs, making threshold checks unreliable as a gate
+3. **Secret exposure surface**: more frequent secret use means more exposure opportunity
+4. **Slow feedback**: real API calls add latency to PR review cycles
+
+The `MockLLMClient` in the default workflow covers all code paths that matter for correctness. The live workflow exists to validate the real provider path before releases or after provider-side changes.
+
+### Adding `OPENAI_API_KEY` as a GitHub repository secret
+
+1. Go to your repository → **Settings** → **Secrets and variables** → **Actions**
+2. Click **New repository secret**
+3. Name: `OPENAI_API_KEY`
+4. Value: your OpenAI API key (starts with `sk-`)
+5. Click **Add secret**
+
+The secret is automatically masked in GitHub Actions log output and is never stored in the repository.

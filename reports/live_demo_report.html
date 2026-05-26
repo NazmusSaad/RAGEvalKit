@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAGEvalKit Report — cfc26b1169d64677b2cd5eb1374a9de5</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:#1a1a1a;font-size:14px;line-height:1.5}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+
+    /* ── Header ─────────────────────────────── */
+    .hdr{background:#1e2a3a;color:#fff;border-radius:10px;padding:24px 28px;margin-bottom:24px}
+    .hdr h1{font-size:1.35rem;font-weight:700;margin-bottom:12px}
+    .meta{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:.8rem;color:#aab}
+    .meta strong{color:#ddd}
+
+    /* ── Score cards ─────────────────────────── */
+    .cards{display:flex;gap:16px;margin-bottom:20px}
+    .card{flex:1;background:#fff;border-radius:10px;padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .card .num{font-size:2.4rem;font-weight:800;line-height:1;margin-bottom:4px}
+    .card .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:1.2px;color:#888}
+    .card.pass .num{color:#22c55e}
+    .card.fail .num{color:#ef4444}
+    .card.unk  .num{color:#94a3b8}
+
+    /* ── Section card ────────────────────────── */
+    .sec{background:#fff;border-radius:10px;padding:20px 24px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .sec h2{font-size:.95rem;font-weight:700;color:#333;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #eee}
+
+    /* ── Tables ──────────────────────────────── */
+    table{width:100%;border-collapse:collapse}
+    th{background:#f8f9fa;text-align:left;padding:7px 12px;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;color:#666;border-bottom:1px solid #eee}
+    td{padding:8px 12px;border-bottom:1px solid #f3f3f3;vertical-align:top;font-size:.85rem}
+    tr:last-child td{border-bottom:none}
+
+    /* ── Badges ──────────────────────────────── */
+    .badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:.7rem;font-weight:700;white-space:nowrap}
+    .lbl-pass{background:#dcfce7;color:#15803d}
+    .lbl-fail{background:#fee2e2;color:#b91c1c}
+    .lbl-unknown{background:#e2e8f0;color:#475569}
+    .sta-finished{background:#dcfce7;color:#15803d}
+    .sta-running{background:#dbeafe;color:#1e40af}
+    .sta-failed{background:#fee2e2;color:#b91c1c}
+    .vrd-supported{background:#dcfce7;color:#15803d}
+    .vrd-contradicted{background:#fee2e2;color:#b91c1c}
+    .vrd-not_enough_info{background:#fef9c3;color:#92400e}
+    .vrd-unjudged{background:#e2e8f0;color:#475569}
+    .rc-badge{background:#e0e7ff;color:#3730a3}
+
+    /* ── Items / details ─────────────────────── */
+    .item-list{list-style:none}
+    .item-list li{margin-bottom:8px}
+    details{background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+    summary{padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:8px;flex-wrap:wrap;list-style:none;user-select:none}
+    summary::-webkit-details-marker{display:none}
+    .arrow{font-size:.6rem;color:#aaa;flex-shrink:0;display:inline-block;transition:transform .15s}
+    details[open] .arrow{transform:rotate(90deg)}
+    .q-prev{flex:1;font-size:.85rem;font-weight:500;color:#333}
+    .item-body{padding:16px 20px;border-top:1px solid #f0f0f0}
+
+    /* ── Q&A block ───────────────────────────── */
+    .qa{background:#f9fafb;border-radius:6px;padding:12px 16px;margin-bottom:14px}
+    .qa p{font-size:.85rem;margin-bottom:6px}
+    .qa p:last-child{margin-bottom:0}
+    .qa strong{color:#555}
+
+    /* ── Sub-headings ────────────────────────── */
+    .sub{font-size:.75rem;font-weight:700;text-transform:uppercase;color:#888;letter-spacing:.6px;margin:14px 0 6px}
+
+    /* ── Notes ───────────────────────────────── */
+    .note{background:#fffbeb;border-left:3px solid #f59e0b;padding:8px 12px;border-radius:4px;font-size:.8rem;color:#78350f;font-style:italic}
+
+    code{background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:.82em;font-family:monospace}
+    footer{text-align:center;color:#bbb;font-size:.75rem;margin-top:28px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  
+  <header class="hdr">
+    <h1>RAGEvalKit Evaluation Report</h1>
+    <div class="meta">
+      <span><strong>Run ID:</strong> <code>cfc26b1169d64677b2cd5eb1374a9de5</code></span>
+      <span><strong>Tag:</strong> live-demo</span>
+      <span><strong>Status:</strong>
+        <span class="badge sta-completed">completed</span>
+      </span>
+      <span><strong>Started:</strong> 2026-05-25 12:22 UTC</span>
+      <span><strong>Finished:</strong> 2026-05-25 12:23 UTC</span>
+      <span><strong>Name:</strong> demo_openai-run</span>
+    </div>
+  </header>
+
+  
+  <div class="cards">
+    <div class="card pass">
+      <div class="num">2</div>
+      <div class="lbl">Pass</div>
+    </div>
+    <div class="card fail">
+      <div class="num">1</div>
+      <div class="lbl">Fail</div>
+    </div>
+    <div class="card unk">
+      <div class="num">0</div>
+      <div class="lbl">Unknown</div>
+    </div>
+  </div>
+
+  
+  <div class="sec">
+    <h2>Metric Summary</h2>
+    
+    <table>
+      <thead><tr><th>Metric</th><th>Mean Score</th></tr></thead>
+      <tbody>
+        
+        <tr>
+          <td><code>recall_at_k</code></td>
+          <td>0.667</td>
+        </tr>
+        
+        <tr>
+          <td><code>mrr</code></td>
+          <td>0.444</td>
+        </tr>
+        
+        <tr>
+          <td><code>answer_relevance</code></td>
+          <td>0.917</td>
+        </tr>
+        
+        <tr>
+          <td><code>faithfulness</code></td>
+          <td>1.000</td>
+        </tr>
+        
+      </tbody>
+    </table>
+    
+  </div>
+
+  
+  <div class="sec">
+    <h2>Root-Cause Distribution</h2>
+    
+    <table>
+      <thead><tr><th>Cause</th><th>Count</th></tr></thead>
+      <tbody>
+        
+        <tr><td>retrieval_failure</td><td>1</td></tr>
+        
+        <tr><td>none</td><td>2</td></tr>
+        
+      </tbody>
+    </table>
+    
+  </div>
+
+  
+  <div class="sec">
+    <h2>Items (3)</h2>
+    
+    <ul class="item-list">
+      
+      <li>
+        <details>
+          <summary>
+            <span class="arrow">&#9654;</span>
+            <span class="q-prev">
+              
+                What does the `rageval ci-check` command do?
+              
+            </span>
+            <span class="badge lbl-pass">pass</span>
+            
+            <span class="badge rc-badge">none</span>
+            
+          </summary>
+          <div class="item-body">
+
+            
+            <div class="qa">
+              <p><strong>Question:</strong> What does the `rageval ci-check` command do?</p>
+              <p><strong>Generated Answer:</strong> The `rageval ci-check` command compares a candidate run against a baseline run and checks if all configured thresholds are satisfied. It returns an exit code of 0 if all thresholds are met (indicating the candidate run passes the CI gate) and an exit code of 1 if one or more thresholds are violated (indicating the CI gate fails).</p>
+              
+              <p><strong>Reference Answer:</strong> The `rageval ci-check` command compares a candidate run against a baseline run and fails with exit code 1 if configured thresholds are violated.</p>
+              
+            </div>
+
+            
+            <p class="sub">Metric Scores</p>
+            
+            <table>
+              <thead><tr><th>Metric</th><th>Score</th><th>Label</th><th>Reason</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td><code>recall_at_k</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>source found in top-5</td>
+                </tr>
+                
+                <tr>
+                  <td><code>mrr</code></td>
+                  <td>0.333</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>first relevant at rank 3</td>
+                </tr>
+                
+                <tr>
+                  <td><code>answer_relevance</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>Directly and fully explains the function and exit codes of the command.</td>
+                </tr>
+                
+                <tr>
+                  <td><code>faithfulness</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>6/6 claims supported (faithfulness=1.000)</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            
+            <p class="sub">Root Cause</p>
+            <p>
+              Primary: <strong>none</strong>
+              
+            </p>
+            
+            
+
+            
+            <p class="sub">Retrieved Contexts</p>
+            
+            <table>
+              <thead><tr><th>#</th><th>Chunk ID</th><th>Score</th><th>Text</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>0</td>
+                  <td><code>3dc9fddd39340b&#8230;</code></td>
+                  <td>0.803</td>
+                  <td>
+                    
+                      or `recall_at_k_drop_max`. When both are present, the primary name (`recall_at_k_min` or `recall_at_k_drop_max`) takes precedence.
+
+## Exit Codes and CI Integration
+
+The `rageval ci-check` command ret&#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>1</td>
+                  <td><code>586e8341933af9&#8230;</code></td>
+                  <td>0.788</td>
+                  <td>
+                    
+                      baseline commit and store the run ID.
+2. Make changes to the RAG pipeline (embedding model, prompt, retrieval parameters).
+3. Run the full evaluation pipeline on the candidate commit.
+4. Run `rageval &#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>2</td>
+                  <td><code>7f60af457ffcfe&#8230;</code></td>
+                  <td>0.782</td>
+                  <td>
+                    
+                      # CI Regression Testing for RAG Pipelines
+
+Continuous Integration (CI) regression testing for RAG systems ensures that changes to the retriever, embedding model, generator, or prompt templates do not &#8230;
+                    
+                  </td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            <p class="sub">Claims &amp; Groundedness</p>
+            
+            <table>
+              <thead><tr><th>Claim</th><th>Verdict</th><th>Supporting Chunks</th><th>Rationale</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>The `rageval ci-check` command compares a candidate run against a baseline run.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      586e8341933af96a08f7b5ba7720d01e2c56bee7025ce404acb4d1e045dbac03, 7f60af457ffcfe0ab818a70ed06f51f021a9f5adfb9bcb5623adb797a079c31e
+                    
+                  </td>
+                  <td>Sources confirm that `rageval ci-check` compares a candidate run against a baseline run.</td>
+                </tr>
+                
+                <tr>
+                  <td>The `rageval ci-check` command checks if all configured thresholds are satisfied.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      3dc9fddd39340be1a76c34dd87fe143eaaa51ea47ea12ffaefc9a718da15eba3, 7f60af457ffcfe0ab818a70ed06f51f021a9f5adfb9bcb5623adb797a079c31e
+                    
+                  </td>
+                  <td>The command checks thresholds and returns exit code 0 if all are satisfied.</td>
+                </tr>
+                
+                <tr>
+                  <td>The `rageval ci-check` command returns an exit code of 0 if all thresholds are met.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      3dc9fddd39340be1a76c34dd87fe143eaaa51ea47ea12ffaefc9a718da15eba3
+                    
+                  </td>
+                  <td>Source states exit code 0 is returned when all configured thresholds are satisfied.</td>
+                </tr>
+                
+                <tr>
+                  <td>An exit code of 0 indicates that the candidate run passes the CI gate.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      3dc9fddd39340be1a76c34dd87fe143eaaa51ea47ea12ffaefc9a718da15eba3
+                    
+                  </td>
+                  <td>Source states that exit code 0 indicates the candidate run passes the CI gate.</td>
+                </tr>
+                
+                <tr>
+                  <td>The `rageval ci-check` command returns an exit code of 1 if one or more thresholds are violated.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      3dc9fddd39340be1a76c34dd87fe143eaaa51ea47ea12ffaefc9a718da15eba3, 7f60af457ffcfe0ab818a70ed06f51f021a9f5adfb9bcb5623adb797a079c31e
+                    
+                  </td>
+                  <td>Sources confirm that `rageval ci-check` returns exit code 1 if one or more thresholds are violated.</td>
+                </tr>
+                
+                <tr>
+                  <td>An exit code of 1 indicates that the CI gate fails.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      3dc9fddd39340be1a76c34dd87fe143eaaa51ea47ea12ffaefc9a718da15eba3, 7f60af457ffcfe0ab818a70ed06f51f021a9f5adfb9bcb5623adb797a079c31e
+                    
+                  </td>
+                  <td>Exit code 1 indicates that one or more thresholds are violated, causing the CI gate to fail.</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+          </div>
+        </details>
+      </li>
+      
+      <li>
+        <details>
+          <summary>
+            <span class="arrow">&#9654;</span>
+            <span class="q-prev">
+              
+                What do absolute thresholds define?
+              
+            </span>
+            <span class="badge lbl-fail">fail</span>
+            
+            <span class="badge rc-badge">retrieval_failure</span>
+            
+          </summary>
+          <div class="item-body">
+
+            
+            <div class="qa">
+              <p><strong>Question:</strong> What do absolute thresholds define?</p>
+              <p><strong>Generated Answer:</strong> Absolute thresholds define a minimum acceptable score for each metric, ensuring that the system must always meet a baseline level of quality, regardless of what the baseline achieves.</p>
+              
+              <p><strong>Reference Answer:</strong> Absolute thresholds define a minimum acceptable score for each metric.</p>
+              
+            </div>
+
+            
+            <p class="sub">Metric Scores</p>
+            
+            <table>
+              <thead><tr><th>Metric</th><th>Score</th><th>Label</th><th>Reason</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td><code>recall_at_k</code></td>
+                  <td>0.000</td>
+                  <td><span class="badge lbl-fail">fail</span></td>
+                  <td>source not found in top-5</td>
+                </tr>
+                
+                <tr>
+                  <td><code>mrr</code></td>
+                  <td>0.000</td>
+                  <td><span class="badge lbl-fail">fail</span></td>
+                  <td>no relevant chunk found within top-k</td>
+                </tr>
+                
+                <tr>
+                  <td><code>answer_relevance</code></td>
+                  <td>0.750</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>Addresses absolute thresholds but includes irrelevant details about metrics and quality.</td>
+                </tr>
+                
+                <tr>
+                  <td><code>faithfulness</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>3/3 claims supported (faithfulness=1.000)</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            
+            <p class="sub">Root Cause</p>
+            <p>
+              Primary: <strong>retrieval_failure</strong>
+              
+            </p>
+            
+            <p style="margin-top:4px;color:#555">Fix: Improve retrieval by adjusting chunk size, increasing top_k, changing the embedding model, or adding reranking.</p>
+            
+            
+
+            
+            <p class="sub">Retrieved Contexts</p>
+            
+            <table>
+              <thead><tr><th>#</th><th>Chunk ID</th><th>Score</th><th>Text</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>0</td>
+                  <td><code>ac9b5908a8fc13&#8230;</code></td>
+                  <td>0.765</td>
+                  <td>
+                    
+                      hresholds define a minimum acceptable score for each metric, regardless of what the baseline achieves. They are configured under the `absolute` key in a thresholds YAML file:
+
+```yaml
+absolute:
+  reca&#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>1</td>
+                  <td><code>52aba6e1d97bdf&#8230;</code></td>
+                  <td>0.688</td>
+                  <td>
+                    
+                      aseline achieves faithfulness of 0.90 and the candidate achieves 0.82, the drop is 0.08, which exceeds the allowed 0.05 and triggers a failure. Relative thresholds catch regressions even when the abso&#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>2</td>
+                  <td><code>98c3675a22641a&#8230;</code></td>
+                  <td>0.687</td>
+                  <td>
+                    
+                      oor — the system must always meet a baseline level of quality, even if no regression occurred.
+
+## Relative Thresholds
+
+Relative thresholds define the maximum allowed drop from baseline to candidate. &#8230;
+                    
+                  </td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            <p class="sub">Claims &amp; Groundedness</p>
+            
+            <table>
+              <thead><tr><th>Claim</th><th>Verdict</th><th>Supporting Chunks</th><th>Rationale</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>Absolute thresholds define a minimum acceptable score for each metric.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      ac9b5908a8fc1379c878eacea080ec8066c5723f5573db94711bd6d95cd1e418
+                    
+                  </td>
+                  <td>Source 0 explicitly states that absolute thresholds define a minimum acceptable score for each metric.</td>
+                </tr>
+                
+                <tr>
+                  <td>Absolute thresholds ensure that the system must always meet a baseline level of quality.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      ac9b5908a8fc1379c878eacea080ec8066c5723f5573db94711bd6d95cd1e418
+                    
+                  </td>
+                  <td>Source 0 states that absolute thresholds enforce a quality floor, ensuring a baseline level of quality.</td>
+                </tr>
+                
+                <tr>
+                  <td>The baseline level of quality is independent of what the baseline achieves.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      ac9b5908a8fc1379c878eacea080ec8066c5723f5573db94711bd6d95cd1e418, 98c3675a22641a70c0469567e0aa5aed5b90c5fb6c91dcce0ac5aacea4868822
+                    
+                  </td>
+                  <td>Thresholds define a minimum acceptable score independent of baseline achievements.</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+          </div>
+        </details>
+      </li>
+      
+      <li>
+        <details>
+          <summary>
+            <span class="arrow">&#9654;</span>
+            <span class="q-prev">
+              
+                What is the minimum acceptable score for faithfulness defined in the thresholds?
+              
+            </span>
+            <span class="badge lbl-pass">pass</span>
+            
+            <span class="badge rc-badge">none</span>
+            
+          </summary>
+          <div class="item-body">
+
+            
+            <div class="qa">
+              <p><strong>Question:</strong> What is the minimum acceptable score for faithfulness defined in the thresholds?</p>
+              <p><strong>Generated Answer:</strong> The minimum acceptable score for faithfulness defined in the thresholds is 0.80.</p>
+              
+              <p><strong>Reference Answer:</strong> 0.80</p>
+              
+            </div>
+
+            
+            <p class="sub">Metric Scores</p>
+            
+            <table>
+              <thead><tr><th>Metric</th><th>Score</th><th>Label</th><th>Reason</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td><code>recall_at_k</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>source found in top-5</td>
+                </tr>
+                
+                <tr>
+                  <td><code>mrr</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>first relevant at rank 1</td>
+                </tr>
+                
+                <tr>
+                  <td><code>answer_relevance</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>Directly and fully addresses the question with the correct minimum score.</td>
+                </tr>
+                
+                <tr>
+                  <td><code>faithfulness</code></td>
+                  <td>1.000</td>
+                  <td><span class="badge lbl-pass">pass</span></td>
+                  <td>2/2 claims supported (faithfulness=1.000)</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            
+            <p class="sub">Root Cause</p>
+            <p>
+              Primary: <strong>none</strong>
+              
+            </p>
+            
+            
+
+            
+            <p class="sub">Retrieved Contexts</p>
+            
+            <table>
+              <thead><tr><th>#</th><th>Chunk ID</th><th>Score</th><th>Text</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>0</td>
+                  <td><code>ac9b5908a8fc13&#8230;</code></td>
+                  <td>0.818</td>
+                  <td>
+                    
+                      hresholds define a minimum acceptable score for each metric, regardless of what the baseline achieves. They are configured under the `absolute` key in a thresholds YAML file:
+
+```yaml
+absolute:
+  reca&#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>1</td>
+                  <td><code>eff1c077c38f1e&#8230;</code></td>
+                  <td>0.771</td>
+                  <td>
+                    
+                      d groundedness) measures whether the generated answer is supported by the retrieved context. To compute faithfulness, the answer is broken into atomic claims. Each claim is then verified against the r&#8230;
+                    
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>2</td>
+                  <td><code>98c3675a22641a&#8230;</code></td>
+                  <td>0.699</td>
+                  <td>
+                    
+                      oor — the system must always meet a baseline level of quality, even if no regression occurred.
+
+## Relative Thresholds
+
+Relative thresholds define the maximum allowed drop from baseline to candidate. &#8230;
+                    
+                  </td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+            
+            <p class="sub">Claims &amp; Groundedness</p>
+            
+            <table>
+              <thead><tr><th>Claim</th><th>Verdict</th><th>Supporting Chunks</th><th>Rationale</th></tr></thead>
+              <tbody>
+                
+                <tr>
+                  <td>The minimum acceptable score for faithfulness is 0.80.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      ac9b5908a8fc1379c878eacea080ec8066c5723f5573db94711bd6d95cd1e418
+                    
+                  </td>
+                  <td>Source [0] explicitly states the minimum acceptable score for faithfulness is 0.80.</td>
+                </tr>
+                
+                <tr>
+                  <td>The minimum acceptable score for faithfulness is defined in the thresholds.</td>
+                  <td><span class="badge vrd-supported">supported</span></td>
+                  <td>
+                    
+                      ac9b5908a8fc1379c878eacea080ec8066c5723f5573db94711bd6d95cd1e418
+                    
+                  </td>
+                  <td>Source 0 defines a minimum acceptable score for faithfulness as 0.80 in the thresholds.</td>
+                </tr>
+                
+              </tbody>
+            </table>
+            
+
+          </div>
+        </details>
+      </li>
+      
+    </ul>
+    
+  </div>
+
+  <footer>
+    <p>Generated by RAGEvalKit &mdash; run <code>cfc26b1169d64677b2cd5eb1374a9de5</code></p>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -165,21 +165,32 @@ Goal: evaluate RAG pipeline quality, diagnose failures, compare versions, and fa
 - Added `--json` output for CI usage
 - Verified manual CI check flow
 
-### Current: Milestone 6A
-Goal: generate a static HTML report for a completed run.
+### Completed: Milestone 6A
+- Added static HTML report generation
+- Implemented `rageval report --run <run_id>`
+- Added run metadata, metric summary, root-cause distribution, retrieved contexts, and claim-level details
+- Added graceful handling for missing metrics/root causes/claims
+- Added self-contained Jinja2 HTML template
+- Verified report generation manually
+
+### Completed: Milestone 6B
+- Added realistic live OpenAI demo path
+- Added realistic demo corpus
+- Added OpenAI demo config
+- Added PowerShell and Bash demo scripts
+- Added live demo documentation
+- Verified full live demo pipeline with real generated answers and judge outputs
+- Produced meaningful HTML report showing pass/fail metrics and root-cause diagnosis
+
+### Current: Milestone 7A
+Goal: polish the GitHub/recruiter-facing MVP.
 
 Scope:
-- Implement `rageval report --run <run_id> --output report.html`
-- Show run metadata
-- Show metric summary
-- Show pass/fail/unknown counts
-- Show root-cause distribution
-- Show worst/failing examples if available
-- Show retrieved chunks and claim verdicts per item
-- Produce a self-contained HTML file
-
-Do not implement yet:
-- GitHub Actions workflow
-- Docker
-- hosted dashboard
-- Streamlit
+- Improve README
+- Add quickstart commands
+- Add architecture diagram
+- Add screenshots from the live report
+- Add sample output snippets
+- Add demo script instructions
+- Add sample report artifact
+- Document current limitations and roadmap

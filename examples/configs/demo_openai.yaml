@@ -1,0 +1,54 @@
+version: 1
+name: demo_openai
+seed: 42
+
+corpus:
+  path: examples/demo-corpus
+  glob: "**/*.md"
+
+chunking:
+  strategy: recursive
+  chunk_size: 512
+  chunk_overlap: 64
+
+embedding:
+  provider: sentence_transformers
+  model: BAAI/bge-small-en-v1.5
+  batch_size: 32
+
+vector_store:
+  type: chroma
+  path: .rageval/chroma
+  collection: demo_openai
+  distance: cosine
+
+retrieval:
+  top_k: 3
+  rerank: null
+  filter: null
+
+generation:
+  provider: openai
+  model: gpt-4o-mini
+  temperature: 0.0
+  max_tokens: 512
+  system_prompt_path: prompts/system.txt
+  prompt_template_path: prompts/rag.j2
+
+judge:
+  provider: openai
+  model: gpt-4o-mini
+  temperature: 0.0
+  max_concurrent: 4
+
+evaluators:
+  - retrieval_relevance
+  - groundedness
+  - answer_relevance
+
+evalset:
+  path: evalsets/demo_openai.jsonl
+
+cost:
+  input_per_1k: 0.00015
+  output_per_1k: 0.00060
